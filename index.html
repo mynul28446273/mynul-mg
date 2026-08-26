@@ -2,14 +2,18 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mynul.mg - Video Archive</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>mynul.mg - Premium Archive</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Uploadcare Widget -->
+    <!-- Uploadcare Widget Config -->
+    <script>
+        UPLOADCARE_PUBLIC_KEY = '47591ac5fd5756296d19';
+        UPLOADCARE_TABS = 'file';
+    </script>
     <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
 
     <style>
@@ -18,9 +22,9 @@
             --bg-dark: #020617;
             --card-bg: #1e293b;
             --accent: #6366f1;
+            --danger: #ef4444;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --success: #22c55e;
         }
 
         body {
@@ -28,10 +32,11 @@
             color: var(--text-main);
             font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding-bottom: 80px;
+            padding-bottom: 90px;
+            overflow-x: hidden;
         }
 
-        /* --- Header Navigation --- */
+        /* --- Navigation --- */
         .navbar {
             background: var(--card-bg);
             padding: 15px 20px;
@@ -43,150 +48,102 @@
             z-index: 1000;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; letter-spacing: 1px; }
+        .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 15px; }
 
-        /* --- Archive Style Control Bar --- */
-        .control-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
-            background: rgba(30, 41, 59, 0.5);
+        /* --- Page Sections --- */
+        .page-section { display: none; animation: fadeIn 0.4s ease; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Upload Management Layout --- */
+        .archive-controls {
+            background: var(--card-bg);
             padding: 20px;
-            border-radius: 20px;
+            border-radius: 24px;
             border: 1px solid rgba(255,255,255,0.05);
-            align-items: center;
+            margin-bottom: 25px;
         }
 
-        .search-box {
-            flex: 2;
-            min-width: 250px;
-            position: relative;
-        }
+        .search-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .search-box { flex: 1; position: relative; }
         .search-box input {
-            width: 100%;
-            background: var(--bg-dark);
-            border: 1px solid #334155;
-            padding: 12px 15px 12px 40px;
-            border-radius: 12px;
-            color: #fff;
-            outline: none;
+            width: 100%; background: var(--bg-dark); border: 1px solid #334155;
+            padding: 12px 12px 12px 40px; border-radius: 14px; color: #fff; outline: none;
         }
         .search-box i { position: absolute; left: 15px; top: 14px; color: var(--text-muted); }
 
-        .sort-box { flex: 1; min-width: 150px; }
-        .sort-box select {
-            width: 100%;
-            background: var(--bg-dark);
-            color: #fff;
-            border: 1px solid #334155;
-            padding: 11px;
-            border-radius: 12px;
-            outline: none;
+        .sort-select {
+            background: var(--bg-dark); color: #fff; border: 1px solid #334155;
+            padding: 10px; border-radius: 14px; outline: none; font-size: 13px;
         }
 
-        .btn-upload-trigger {
-            background: var(--primary);
-            color: #000;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .btn-upload-big {
+            width: 100%; background: var(--primary); color: #000;
+            border: none; padding: 16px; border-radius: 16px;
+            font-weight: 800; font-size: 16px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             transition: 0.3s;
         }
-        .btn-upload-trigger:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4); }
 
-        /* --- Video Grid Layout --- */
+        /* --- Progress Bar --- */
+        #progress-container {
+            display: none; margin-top: 15px; background: rgba(255,255,255,0.05);
+            border-radius: 10px; height: 25px; position: relative; overflow: hidden;
+        }
+        #progress-bar {
+            height: 100%; width: 0%; background: var(--primary);
+            transition: width 0.3s; display: flex; align-items: center; justify-content: center;
+        }
+        #progress-text { font-size: 11px; font-weight: 800; color: #000; position: absolute; width: 100%; text-align: center; }
+
+        /* --- Video Grid --- */
         .video-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 15px;
         }
 
         .video-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
+            background: var(--card-bg); border-radius: 20px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;
         }
-        .video-card:hover { border-color: var(--primary); transform: translateY(-5px); }
 
-        .thumbnail-area {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
+        .thumb {
+            width: 100%; aspect-ratio: 4/3; background: #000;
+            display: flex; align-items: center; justify-content: center; position: relative;
         }
-        .thumbnail-area i { font-size: 40px; color: rgba(255,255,255,0.1); }
-        .play-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: 0.3s;
-        }
-        .video-card:hover .play-overlay { opacity: 1; }
-
-        .card-body { padding: 15px; flex-grow: 1; }
-        .video-name { font-size: 14px; font-weight: 600; margin-bottom: 5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .video-date { font-size: 11px; color: var(--text-muted); margin-bottom: 15px; }
+        .thumb i { font-size: 35px; color: rgba(255,255,255,0.1); }
+        
+        .card-info { padding: 12px; flex-grow: 1; }
+        .v-name { font-size: 12px; font-weight: 600; margin-bottom: 5px; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .v-date { font-size: 10px; color: var(--text-muted); }
 
         .card-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            padding: 0 15px 15px;
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px; padding: 10px; border-top: 1px solid rgba(255,255,255,0.05);
         }
-        .btn-card {
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            transition: 0.2s;
-        }
-        .btn-play { background: var(--primary); color: #000; }
-        .btn-copy { background: #334155; color: #fff; }
-        .btn-card:active { transform: scale(0.95); }
+        .btn-sm { border: none; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer; color: #fff; text-align: center; text-decoration: none; }
+        .bg-blue { background: var(--primary); color: #000; }
+        .bg-gray { background: #334155; }
+        .bg-red { background: var(--danger); }
 
-        /* Hidden Uploadcare Widget */
-        .uploadcare--widget { display: none !important; }
-
-        /* Bottom Nav */
+        /* --- Bottom Tabs --- */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; right: 0;
-            background: var(--card-bg);
-            display: flex; justify-content: space-around;
-            padding: 12px; border-top: 1px solid rgba(255,255,255,0.1);
-            z-index: 1000;
+            background: #111827; display: flex; justify-content: space-around;
+            padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 2000;
         }
-        .nav-item { color: var(--text-muted); text-decoration: none; text-align: center; font-size: 10px; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 2px; }
-        .nav-item.active { color: var(--primary); }
+        .nav-tab { color: var(--text-muted); text-decoration: none; text-align: center; font-size: 10px; border: none; background: none; cursor: pointer; }
+        .nav-tab i { font-size: 22px; display: block; margin-bottom: 3px; }
+        .nav-tab.active { color: var(--primary); }
 
-        @media (max-width: 600px) {
-            .video-grid { grid-template-columns: 1fr; }
-            .control-bar { padding: 15px; }
+        /* Settings Card */
+        .settings-card { background: var(--card-bg); padding: 20px; border-radius: 20px; margin-top: 20px; }
+
+        @media (max-width: 480px) {
+            .video-grid { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -194,149 +151,190 @@
 
     <nav class="navbar">
         <a href="#" class="logo">mynul.mg</a>
-        <div style="font-size: 12px; background: var(--primary); color: #000; padding: 2px 8px; border-radius: 5px; font-weight: 700;">FILES</div>
+        <div id="status-badge" style="font-size: 10px; color: var(--primary); border: 1px solid var(--primary); padding: 2px 8px; border-radius: 20px;">ONLINE</div>
     </nav>
 
     <div class="container">
         
-        <!-- Control Bar (Internet Archive Style) -->
-        <div class="control-bar">
-            <div class="search-box">
-                <i class="fa-solid fa-search"></i>
-                <input type="text" id="searchInput" placeholder="ভিডিওর নাম দিয়ে খুঁজুন..." oninput="filterVideos()">
+        <!-- HOME SECTION -->
+        <div id="home-page" class="page-section active">
+            <h2 style="text-align:center; margin-top:50px;">Welcome to Mynul MG</h2>
+            <p style="text-align:center; color:var(--text-muted);">আপনার ভিডিও হোস্টিং এবং ম্যানেজমেন্ট পোর্টাল।</p>
+            <div class="archive-controls" style="margin-top:30px; text-align:center;">
+                <p>আপনি এ পর্যন্ত <b id="stat-count" style="color:var(--primary)">0</b> টি ফাইল আপলোড করেছেন।</p>
+                <button class="btn-upload-big" onclick="changeTab('uploads-page', document.getElementById('tab-uploads'))">ফাইল দেখতে এখানে ক্লিক করুন</button>
             </div>
-            
-            <div class="sort-box">
-                <select id="sortSelect" onchange="sortVideos()">
-                    <option value="newest">Newest First</option>
-                    <option value="oldest">Oldest First</option>
-                </select>
-            </div>
-
-            <button class="btn-upload-trigger" onclick="openUploader()">
-                <i class="fa-solid fa-cloud-arrow-up"></i> Upload
-            </button>
-            
-            <!-- Hidden Widget -->
-            <input type="hidden" role="uploadcare-uploader" 
-                   data-public-key="47591ac5fd5756296d19" 
-                   data-tabs="file" id="uploader">
         </div>
 
-        <div class="video-grid" id="videoGrid">
-            <!-- ভিডিও কার্ডগুলো এখানে লোড হবে -->
+        <!-- UPLOADS SECTION -->
+        <div id="uploads-page" class="page-section">
+            <div class="archive-controls">
+                <button class="btn-upload-big" id="custom-upload-btn">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Upload Video
+                </button>
+
+                <!-- Progress Bar -->
+                <div id="progress-container">
+                    <div id="progress-bar"><span id="progress-text">0%</span></div>
+                </div>
+
+                <div class="search-row" style="margin-top:20px;">
+                    <div class="search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="archiveSearch" placeholder="ভিডিও খুঁজুন..." oninput="filterVideos()">
+                    </div>
+                    <select class="sort-select" id="archiveSort" onchange="sortVideos()">
+                        <option value="new">Newest</option>
+                        <option value="old">Oldest</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="video-grid" id="mainGrid">
+                <!-- ভিডিও কার্ডগুলো এখানে আসবে -->
+            </div>
+        </div>
+
+        <!-- SETTINGS SECTION -->
+        <div id="settings-page" class="page-section">
+            <h3>Settings</h3>
+            <div class="settings-card">
+                <p style="margin:0;">একাউন্ট স্ট্যাটাস: <b>Free Unlimited</b></p>
+                <p style="font-size:12px; color:var(--text-muted);">Storage Location: Uploadcare Cloud</p>
+                <hr style="opacity:0.1; margin:15px 0;">
+                <button class="btn-sm bg-gray" style="width:100%; padding:12px;" onclick="location.reload()">Refresh App</button>
+            </div>
         </div>
 
     </div>
 
-    <!-- Mobile Navigation -->
+    <!-- Bottom Mobile Navigation -->
     <div class="bottom-nav">
-        <a href="#" class="nav-item active"><i class="fa-solid fa-folder-open"></i>Uploads</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-house"></i>Home</a>
-        <a href="#" class="nav-item"><i class="fa-solid fa-gear"></i>Settings</a>
+        <button class="nav-tab active" id="tab-home" onclick="changeTab('home-page', this)">
+            <i class="fa-solid fa-house"></i>Home
+        </button>
+        <button class="nav-tab" id="tab-uploads" onclick="changeTab('uploads-page', this)">
+            <i class="fa-solid fa-folder-open"></i>Uploads
+        </button>
+        <button class="nav-tab" id="tab-settings" onclick="changeTab('settings-page', this)">
+            <i class="fa-solid fa-gear"></i>Settings
+        </button>
     </div>
+
+    <!-- Uploadcare Hidden Input -->
+    <input type="hidden" id="uploader-widget">
 
     <script>
-        const widget = uploadcare.Widget('#uploader');
-        const videoGrid = document.getElementById('videoGrid');
-        let allVideos = [];
+        let videos = JSON.parse(localStorage.getItem('mynul_videos')) || [];
+        const widget = uploadcare.Widget('#uploader-widget');
+        const grid = document.getElementById('mainGrid');
 
-        // ১. ভিডিও আপলোডার ওপেন করা
-        function openUploader() {
-            document.querySelector('.uploadcare--widget__button_type_open').click();
-        }
+        // ১. কাস্টম আপলোড বাটন ক্লিক হ্যান্ডলার
+        document.getElementById('custom-upload-btn').addEventListener('click', () => {
+            const dialog = uploadcare.openDialog(null, {
+                publicKey: '47591ac5fd5756296d19',
+                tabs: 'file'
+            });
 
-        // ২. আপলোড শেষ হলে ডাটা সেভ করা
-        widget.onUploadComplete(function(info) {
-            const videoData = {
-                id: info.uuid,
-                name: info.name,
-                url: info.cdnUrl,
-                date: new Date().getTime() // Sorting-এর জন্য টাইমস্ট্যাম্প
-            };
-            
-            saveToStorage(videoData);
-            loadVideos();
+            // আপলোড প্রগ্রেস ট্র্যাকিং
+            dialog.done(function(file) {
+                document.getElementById('progress-container').style.display = 'block';
+                file.progress(function(uploadInfo) {
+                    let percent = Math.round(uploadInfo.progress * 100);
+                    document.getElementById('progress-bar').style.width = percent + '%';
+                    document.getElementById('progress-text').innerText = percent + '% আপলোড হচ্ছে...';
+                });
+
+                file.done(function(info) {
+                    const newVideo = {
+                        id: info.uuid,
+                        name: info.name,
+                        url: info.cdnUrl,
+                        date: new Date().getTime()
+                    };
+                    videos.unshift(newVideo);
+                    localStorage.setItem('mynul_videos', JSON.stringify(videos));
+                    
+                    // রিসেট UI
+                    document.getElementById('progress-container').style.display = 'none';
+                    document.getElementById('progress-bar').style.width = '0%';
+                    renderGrid(videos);
+                    updateStats();
+                });
+            });
         });
 
-        function saveToStorage(video) {
-            let videos = JSON.parse(localStorage.getItem('mynul_videos')) || [];
-            videos.unshift(video);
-            localStorage.setItem('mynul_videos', JSON.stringify(videos));
-        }
-
-        // ৩. ভিডিও লোড করা (Grid Layout)
-        function loadVideos() {
-            allVideos = JSON.parse(localStorage.getItem('mynul_videos')) || [];
-            renderGrid(allVideos);
-        }
-
+        // ২. ভিডিও গ্রিড রেন্ডার করা
         function renderGrid(data) {
-            videoGrid.innerHTML = '';
+            grid.innerHTML = '';
             if(data.length === 0) {
-                videoGrid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 50px; color: var(--text-muted);">কোনো ভিডিও পাওয়া যায়নি।</div>`;
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">কোনো ভিডিও পাওয়া যায়নি।</div>`;
                 return;
             }
-
-            data.forEach(vid => {
-                const dateStr = new Date(vid.date).toLocaleDateString('bn-BD');
-                const card = document.createElement('div');
-                card.className = 'video-card';
-                card.innerHTML = `
-                    <div class="thumbnail-area">
-                        <i class="fa-solid fa-file-video"></i>
-                        <div class="play-overlay">
-                            <i class="fa-solid fa-circle-play" style="color:var(--primary); font-size:50px;"></i>
+            data.forEach((vid, index) => {
+                const date = new Date(vid.date).toLocaleDateString('bn-BD');
+                grid.innerHTML += `
+                    <div class="video-card">
+                        <div class="thumb"><i class="fa-solid fa-play"></i></div>
+                        <div class="card-info">
+                            <div class="v-name">${vid.name}</div>
+                            <div class="v-date">${date}</div>
+                        </div>
+                        <div class="card-actions">
+                            <a href="${vid.url}" target="_blank" class="btn-sm bg-blue" title="Play"><i class="fa-solid fa-play"></i></a>
+                            <button class="btn-sm bg-gray" onclick="copyLink('${vid.url}')" title="Copy"><i class="fa-solid fa-link"></i></button>
+                            <button class="btn-sm bg-red" onclick="deleteVideo('${vid.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="video-name">${vid.name}</div>
-                        <div class="video-date"><i class="fa-regular fa-calendar-days"></i> ${dateStr}</div>
-                    </div>
-                    <div class="card-actions">
-                        <button class="btn-card btn-copy" onclick="copyLink('${vid.url}')">
-                            <i class="fa-solid fa-link"></i> Copy
-                        </button>
-                        <a href="${vid.url}" target="_blank" class="btn-card btn-play">
-                            <i class="fa-solid fa-play"></i> Play
-                        </a>
-                    </div>
                 `;
-                videoGrid.appendChild(card);
             });
         }
 
-        // ৪. সার্চ ফাংশন
+        // ৩. ডিলিট ফাংশন (New Feature)
+        function deleteVideo(id) {
+            if(confirm('আপনি কি নিশ্চিত যে এই ভিডিওটি ডিলিট করবেন?')) {
+                videos = videos.filter(v => v.id !== id);
+                localStorage.setItem('mynul_videos', JSON.stringify(videos));
+                renderGrid(videos);
+                updateStats();
+            }
+        }
+
+        // ৪. ট্যাব পরিবর্তন ফাংশন
+        function changeTab(pageId, btn) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        // ৫. সার্চ ও সর্ট ফাংশন
         function filterVideos() {
-            const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = allVideos.filter(v => v.name.toLowerCase().includes(term));
+            const term = document.getElementById('archiveSearch').value.toLowerCase();
+            const filtered = videos.filter(v => v.name.toLowerCase().includes(term));
             renderGrid(filtered);
         }
 
-        // ৫. সর্টিং ফাংশন (Date অনুযায়ী)
         function sortVideos() {
-            const val = document.getElementById('sortSelect').value;
-            if(val === 'newest') {
-                allVideos.sort((a, b) => b.date - a.date);
-            } else {
-                allVideos.sort((a, b) => a.date - b.date);
-            }
-            renderGrid(allVideos);
+            const mode = document.getElementById('archiveSort').value;
+            if(mode === 'new') videos.sort((a,b) => b.date - a.date);
+            else videos.sort((a,b) => a.date - b.date);
+            renderGrid(videos);
         }
 
         // ৬. কপি ফাংশন
         function copyLink(url) {
-            const el = document.createElement('input');
-            el.value = url;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-            alert('লিঙ্ক কপি হয়েছে! এবার আপনার শর্টনারে ব্যবহার করুন।');
+            navigator.clipboard.writeText(url).then(() => alert('লিঙ্ক কপি হয়েছে!'));
         }
 
-        // শুরুতে লোড
-        window.onload = loadVideos;
+        function updateStats() {
+            document.getElementById('stat-count').innerText = videos.length;
+        }
+
+        window.onload = () => {
+            renderGrid(videos);
+            updateStats();
+        };
     </script>
 </body>
 </html>
