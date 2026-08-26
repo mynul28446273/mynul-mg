@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>mynul.mg - Premium Cloud Storage</title>
+    <title>mynul.mg - Unlimited Cloud Storage</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -21,83 +21,47 @@
             --bg: #020617;
             --card: #1e293b;
             --danger: #ef4444;
-            --success: #22c55e;
+            --success: #10b981;
             --text-muted: #94a3b8;
         }
 
         * { box-sizing: border-box; }
-        body {
-            background-color: var(--bg);
-            color: #fff;
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding-bottom: 100px;
-        }
+        body { background-color: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 100px; overflow-x: hidden; }
 
         /* Navbar */
-        .navbar {
-            background: var(--card);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: sticky; top: 0; z-index: 1000;
-        }
+        .navbar { background: var(--card); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; }
 
         .container { max-width: 800px; margin: 0 auto; padding: 15px; }
-
-        /* Navigation Logic */
         .section { display: none; }
         .section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* UI Cards */
-        .card {
-            background: var(--card);
-            padding: 25px 20px;
-            border-radius: 25px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-        }
+        /* Storage Card Styles */
+        .card { background: var(--card); padding: 25px 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        
+        /* Unlimited Pulse Animation */
+        .storage-container { width: 100%; background: rgba(0,0,0,0.3); height: 14px; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.3); position: relative; }
+        .storage-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #818cf8, #38bdf8); background-size: 200% 100%; animation: moveGradient 3s linear infinite; }
+        @keyframes moveGradient { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
-        .btn {
-            width: 100%; border: none; padding: 16px; border-radius: 15px;
-            font-weight: 700; font-size: 15px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            transition: 0.3s; margin-bottom: 12px;
-        }
+        .badge-premium { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #000; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+
+        .btn { width: 100%; border: none; padding: 16px; border-radius: 15px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; margin-bottom: 12px; }
         .btn-blue { background: var(--primary); color: #000; }
         .btn-green { background: var(--success); color: #fff; }
 
-        /* Link Input Box */
-        .link-area {
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px;
-            border: 1px solid #334155; margin-top: 5px;
-        }
-        .link-area input {
-            width: 100%; background: transparent; border: none; color: #fff;
-            padding: 10px; outline: none; text-align: center; font-size: 14px;
-        }
-
-        /* Progress Bar */
-        #prog-box {
-            display: none; margin-top: 20px; background: rgba(255,255,255,0.1);
-            border-radius: 12px; height: 35px; position: relative; overflow: hidden;
-            border: 1px solid var(--primary);
-        }
+        /* Progress Bar for Upload */
+        #prog-box { display: none; margin-top: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; height: 35px; position: relative; overflow: hidden; border: 1px solid var(--primary); }
         #prog-bar { height: 100%; width: 0%; background: var(--primary); transition: width 0.3s; }
         #prog-text { position: absolute; width: 100%; text-align: center; top: 8px; font-size: 12px; font-weight: 800; color: #fff; }
 
-        /* Grid */
+        /* Video List Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; }
         .v-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
         .v-thumb { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; font-size: 30px; color: rgba(255,255,255,0.1); }
         .v-body { padding: 12px; }
         .v-title { font-size: 12px; font-weight: 600; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 5px; }
-        
         .v-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
         .act-btn { border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #fff; font-size: 12px; text-align: center; }
         .bg-cyan { background: var(--primary); color: #000; }
@@ -105,11 +69,12 @@
         .bg-red { background: var(--danger); }
 
         /* Bottom Nav */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
         .nav-tab { background: none; border: none; color: var(--text-muted); font-size: 10px; cursor: pointer; text-align: center; }
         .nav-tab i { font-size: 22px; display: block; margin-bottom: 3px; }
         .nav-tab.active { color: var(--primary); }
 
+        .uploadcare--widget { display: none !important; }
         @media (max-width: 480px) { .grid { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
@@ -117,19 +82,29 @@
 
     <nav class="navbar">
         <a href="#" class="logo">mynul.mg</a>
-        <div style="font-size: 11px; color: var(--primary); border: 1px solid; padding: 2px 10px; border-radius: 20px; font-weight: 700;">ACTIVE</div>
+        <div class="badge-premium">Lifetime Unlimited</div>
     </nav>
 
     <div class="container">
         
         <!-- HOME SECTION -->
         <div id="home-sec" class="section active">
-            <div class="card" style="padding: 50px 20px;">
-                <i class="fa-solid fa-cloud-bolt" style="font-size: 60px; color: var(--primary); margin-bottom: 20px;"></i>
-                <h2>Welcome Back, Mynul</h2>
-                <div style="margin-top: 30px; display: flex; justify-content: center; gap: 30px;">
-                    <div><b id="total-count" style="font-size: 24px; color: var(--primary);">0</b><br><small>Files</small></div>
-                    <div style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 30px;"><b style="font-size: 24px; color: var(--success);">$0.00</b><br><small>Income</small></div>
+            <div class="card">
+                <i class="fa-solid fa-infinity" style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"></i>
+                <h2 style="margin: 0; letter-spacing: 1px;">UNLIMITED STORAGE</h2>
+                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">প্রিমিয়াম ক্লাউড হোস্টিং একটিভ আছে</p>
+                
+                <div class="storage-container">
+                    <div class="storage-fill"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+                    <span>ব্যবহৃত জায়গা: <b id="used-txt" style="color:#fff;">0 MB</b></span>
+                    <span>লিমিট: <b style="color:var(--primary);">No Limit</b></span>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; justify-content: center; gap: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                    <div><b id="total-count" style="font-size: 20px; color: var(--primary);">0</b><br><small>Total Files</small></div>
+                    <div style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 30px;"><b style="font-size: 20px; color: var(--success);">$0.00</b><br><small>Earnings</small></div>
                 </div>
             </div>
         </div>
@@ -137,17 +112,13 @@
         <!-- UPLOADS SECTION -->
         <div id="upload-sec" class="section">
             <div class="card">
-                <button class="btn btn-blue" onclick="fromGallery()"><i class="fa-solid fa-images"></i> Upload from Gallery</button>
-                <div class="link-area">
-                    <input type="text" id="linkInput" placeholder="এখানে ভিডিও লিঙ্ক পেস্ট করুন...">
-                    <button class="btn btn-green" style="margin-top:10px; height: 45px;" onclick="fromUrl()"><i class="fa-solid fa-cloud-arrow-down"></i> Save from Link</button>
+                <button class="btn btn-blue" onclick="fromGallery()"><i class="fa-solid fa-images"></i> গ্যালারি থেকে আপলোড</button>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; border: 1px solid #334155;">
+                    <input type="text" id="linkInput" placeholder="ভিডিও লিঙ্ক এখানে পেস্ট করুন..." style="width:100%; background:transparent; border:none; color:#fff; text-align:center; outline:none; font-size:14px;">
+                    <button class="btn btn-green" style="margin-top:10px; height: 45px;" onclick="fromUrl()"><i class="fa-solid fa-link"></i> লিঙ্ক থেকে সেভ করুন</button>
                 </div>
 
                 <div id="prog-box"><div id="prog-bar"></div><div id="prog-text">0% Processing...</div></div>
-
-                <div style="margin-top: 20px; position: relative;">
-                    <input type="text" id="vSearch" placeholder="Search..." oninput="showUI()" style="width:100%; background:var(--bg); border:1px solid #334155; padding:12px; border-radius:12px; color:#fff; outline:none;">
-                </div>
             </div>
             <div class="grid" id="vGrid"></div>
         </div>
@@ -155,15 +126,33 @@
         <!-- SETTINGS SECTION -->
         <div id="settings-sec" class="section">
             <div class="card" style="text-align: left;">
-                <h3>Settings</h3>
-                <button class="btn" style="background: var(--danger); color:#fff;" onclick="clearHistory()">Clear History</button>
-                <button class="btn" style="background: #334155; color:#fff;" onclick="location.reload()">Refresh App</button>
+                <h3 style="color: var(--primary); margin-top: 0;"><i class="fa-solid fa-chart-pie"></i> স্টোরেজ রিপোর্ট</h3>
+                <p style="font-size: 14px; margin-bottom: 5px;">প্লাটফর্ম: <b>Enterprise Cloud</b></p>
+                <p style="font-size: 14px; margin-bottom: 20px;">স্ট্যাটাস: <span style="color: var(--success); font-weight: 700;">Active Unlimited</span></p>
+                
+                <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="display:flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span style="font-size: 13px; color: var(--text-muted);">ব্যবহৃত ডাটা:</span>
+                        <b id="settings-used-txt" style="color:var(--primary);">0 MB</b>
+                    </div>
+                    <div style="display:flex; justify-content: space-between;">
+                        <span style="font-size: 13px; color: var(--text-muted);">ফাইল সংখ্যা:</span>
+                        <b id="settings-count-txt" style="color:var(--primary);">0</b>
+                    </div>
+                </div>
+
+                <p style="font-size: 11px; color: var(--text-muted); margin-top: 15px; font-style: italic;">* আপনার এই একাউন্টটিতে আনলিমিটেড স্টোরেজ লাইফটাইম সাপোর্ট করবে।</p>
+                
+                <hr style="opacity: 0.1; margin: 25px 0;">
+                
+                <button class="btn" style="background: var(--danger); color:#fff; font-size: 13px;" onclick="clearHistory()">লিস্ট ক্লিয়ার করুন (Clear List)</button>
+                <button class="btn" style="background: #334155; color:#fff; font-size: 13px;" onclick="location.reload()">অ্যাপ রিফ্রেশ দিন</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Bottom Menu -->
+    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <button class="nav-tab active" onclick="go('home-sec', this)"><i class="fa-solid fa-house"></i>Home</button>
         <button class="nav-tab" onclick="go('upload-sec', this)"><i class="fa-solid fa-folder-open"></i>Files</button>
@@ -180,9 +169,7 @@
             el.classList.add('active');
         }
 
-        function fromGallery() {
-            uploadcare.openDialog(null, { tabs: 'file' }).done(uploadFile);
-        }
+        function fromGallery() { uploadcare.openDialog(null, { tabs: 'file' }).done(uploadFile); }
 
         function fromUrl() {
             const val = document.getElementById('linkInput').value.trim();
@@ -204,29 +191,45 @@
             });
 
             file.done(info => {
-                const data = { id: info.uuid, name: info.name || "Remote File", url: info.cdnUrl, time: new Date().getTime() };
+                const data = { 
+                    id: info.uuid, 
+                    name: info.name || "Remote File", 
+                    url: info.cdnUrl, 
+                    size: info.size, 
+                    time: new Date().getTime() 
+                };
                 db.unshift(data);
                 localStorage.setItem('mynul_videos', JSON.stringify(db));
                 box.style.display = 'none';
                 showUI();
-                alert('সফলভাবে সেভ হয়েছে!');
+                alert('সফলভাবে আনলিমিটেড ক্লাউডে সেভ হয়েছে!');
             });
+        }
+
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         }
 
         function showUI() {
             const grid = document.getElementById('vGrid');
-            const term = document.getElementById('vSearch').value.toLowerCase();
+            let totalUsed = 0;
             db.sort((a,b) => b.time - a.time);
-            const filtered = db.filter(v => v.name.toLowerCase().includes(term));
-            
             grid.innerHTML = '';
-            document.getElementById('total-count').innerText = db.length;
-
-            if(filtered.length === 0) { grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:var(--text-muted);">No files.</div>'; return; }
-
-            filtered.forEach(v => {
+            db.forEach(v => {
+                totalUsed += v.size || 0;
                 grid.innerHTML += `<div class="v-card"><div class="v-thumb"><i class="fa-solid fa-play"></i></div><div class="v-body"><div class="v-title">${v.name}</div></div><div class="v-actions"><a href="${v.url}" target="_blank" class="act-btn bg-cyan"><i class="fa-solid fa-play"></i></a><button class="act-btn bg-indigo" onclick="copy('${v.url}')"><i class="fa-solid fa-link"></i></button><button class="act-btn bg-red" onclick="remove('${v.id}')"><i class="fa-solid fa-trash"></i></button></div></div>`;
             });
+            const usedStr = formatBytes(totalUsed);
+            document.getElementById('used-txt').innerText = usedStr;
+            document.getElementById('settings-used-txt').innerText = usedStr;
+            document.getElementById('settings-count-txt').innerText = db.length;
+            document.getElementById('total-count').innerText = db.length;
+            if(db.length === 0) grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:var(--text-muted);">No files found.</div>';
         }
 
         function remove(id) { if(confirm('মুছবেন?')) { db = db.filter(v => v.id !== id); localStorage.setItem('mynul_videos', JSON.stringify(db)); showUI(); } }
@@ -234,9 +237,9 @@
         function copy(url) {
             const inp = document.createElement('input'); document.body.appendChild(inp);
             inp.value = url; inp.select(); document.execCommand('copy');
-            document.body.removeChild(inp); alert('কপি হয়েছে!');
+            document.body.removeChild(inp); alert('লিঙ্ক কপি হয়েছে!');
         }
         window.onload = showUI;
     </script>
 </body>
-</html>
+    </html>
