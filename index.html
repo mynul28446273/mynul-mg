@@ -4,137 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>mynul.mg - Premium Archive</title>
-    
-    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Uploadcare Config -->
-    <script>
-        UPLOADCARE_PUBLIC_KEY = '47591ac5fd5756296d19';
-    </script>
+    <script>UPLOADCARE_PUBLIC_KEY = '47591ac5fd5756296d19';</script>
     <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-
     <style>
-        :root {
-            --primary: #38bdf8;
-            --bg-dark: #020617;
-            --card-bg: #1e293b;
-            --danger: #ef4444;
-            --success: #22c55e;
-            --text-muted: #94a3b8;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: #fff;
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding-bottom: 100px;
-        }
-
-        /* --- Navbar --- */
-        .navbar {
-            background: var(--card-bg);
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: sticky; top: 0; z-index: 100;
-        }
+        :root { --primary: #38bdf8; --bg-dark: #020617; --card-bg: #1e293b; --danger: #ef4444; --success: #22c55e; --text-muted: #94a3b8; }
+        body { background-color: var(--bg-dark); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 100px; }
+        .navbar { background: var(--card-bg); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100; }
         .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; }
-
         .container { max-width: 900px; margin: 0 auto; padding: 15px; }
-
         .page-section { display: none; }
         .page-section.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* --- Archive Controls --- */
-        .archive-header {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 25px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
-        }
-
-        .upload-options { display: flex; flex-direction: column; gap: 15px; }
-
-        .btn-action-main {
-            width: 100%; border: none; padding: 15px; border-radius: 15px;
-            font-weight: 800; font-size: 15px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            transition: 0.3s;
-        }
+        .archive-header { background: var(--card-bg); padding: 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .btn-action-main { width: 100%; border: none; padding: 15px; border-radius: 15px; font-weight: 800; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
         .btn-gallery { background: var(--primary); color: #000; }
         .btn-link { background: var(--success); color: #fff; }
-
-        /* URL Input Box */
-        .link-input-area {
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px;
-            border: 1px solid #334155; margin-top: 10px;
-        }
-        .link-input-area input {
-            width: 100%; background: transparent; border: none; color: #fff;
-            padding: 10px; outline: none; text-align: center; font-size: 13px;
-        }
-
-        /* Progress Bar */
-        #upload-progress-container {
-            display: none; margin-top: 15px; background: rgba(0,0,0,0.3);
-            border-radius: 10px; height: 30px; position: relative; overflow: hidden;
-            border: 1px solid var(--primary);
-        }
+        .link-input-area { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; border: 1px solid #334155; margin-top: 10px; }
+        .link-input-area input { width: 100%; background: transparent; border: none; color: #fff; padding: 10px; outline: none; text-align: center; font-size: 13px; }
+        #upload-progress-container { display: none; margin-top: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; height: 30px; position: relative; overflow: hidden; border: 1px solid var(--primary); }
         #progress-bar { height: 100%; width: 0%; background: var(--primary); transition: width 0.3s; }
         #progress-text { position: absolute; width: 100%; text-align: center; top: 5px; font-size: 12px; font-weight: 800; color: #fff; text-shadow: 0 0 5px #000; }
-
-        /* Search & Sort */
-        .filter-row { display: flex; gap: 10px; margin-top: 20px; }
-        .search-box { flex: 2; position: relative; }
-        .search-box input {
-            width: 100%; background: var(--bg-dark); border: 1px solid #334155;
-            padding: 12px 12px 12px 40px; border-radius: 12px; color: #fff; outline: none;
-        }
-        .search-box i { position: absolute; left: 15px; top: 14px; color: var(--text-muted); }
-        .sort-select { flex: 1; background: var(--bg-dark); color: #fff; border: 1px solid #334155; padding: 10px; border-radius: 12px; outline: none; }
-
-        /* --- Video Grid --- */
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
         .video-card { background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
         .card-thumb { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; font-size: 30px; color: rgba(255,255,255,0.1); }
         .card-body { padding: 12px; }
         .v-title { font-size: 12px; font-weight: 600; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 5px; }
         .v-date { font-size: 9px; color: var(--text-muted); }
-
         .card-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
         .btn-action { border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #fff; font-size: 12px; text-align: center; }
         .bg-cyan { background: var(--primary); color: #000; }
         .bg-blue { background: #6366f1; }
         .bg-red { background: var(--danger); }
-
-        /* --- Bottom Nav --- */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
         .nav-btn { background: none; border: none; color: var(--text-muted); font-size: 10px; cursor: pointer; text-align: center; }
         .nav-btn i { font-size: 20px; display: block; margin-bottom: 2px; }
         .nav-btn.active { color: var(--primary); }
-
         .uploadcare--widget { display: none !important; }
         @media (max-width: 480px) { .video-grid { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
 <body>
-
-    <nav class="navbar">
-        <a href="#" class="logo">mynul.mg</a>
-        <div style="font-size: 11px; color: var(--primary); border: 1px solid; padding: 2px 10px; border-radius: 20px; font-weight: 700;">CLOUD PRO</div>
-    </nav>
-
+    <nav class="navbar"><a href="#" class="logo">mynul.mg</a><div style="font-size: 11px; color: var(--primary); border: 1px solid; padding: 2px 10px; border-radius: 20px; font-weight: 700;">CLOUD PRO</div></nav>
     <div class="container">
-        
-        <!-- Section: Home -->
         <div id="home-sec" class="page-section active">
             <div class="archive-header" style="padding: 60px 20px;">
                 <i class="fa-solid fa-bolt" style="font-size: 60px; color: var(--primary); margin-bottom: 20px;"></i>
@@ -145,49 +58,20 @@
                 </div>
             </div>
         </div>
-
-        <!-- Section: Uploads -->
         <div id="upload-sec" class="page-section">
             <div class="archive-header">
                 <div class="upload-options">
-                    <!-- Gallery Upload -->
-                    <button class="btn-action-main btn-gallery" onclick="openGalleryUploader()">
-                        <i class="fa-solid fa-images"></i> Upload from Gallery
-                    </button>
-
-                    <div style="color:var(--text-muted); font-size: 12px;">— OR —</div>
-
-                    <!-- Remote URL Upload -->
+                    <button class="btn-action-main btn-gallery" onclick="openGalleryUploader()"><i class="fa-solid fa-images"></i> Upload from Gallery</button>
+                    <div style="color:var(--text-muted); font-size: 12px; margin-top:10px;">— OR —</div>
                     <div class="link-input-area">
-                        <input type="text" id="remoteUrl" placeholder="অন্য সাইটের ভিডিও লিঙ্ক এখানে দিন...">
-                        <button class="btn-action-main btn-link" style="margin-top:10px; height: 45px;" onclick="uploadFromUrl()">
-                            <i class="fa-solid fa-cloud-arrow-down"></i> Save from Link
-                        </button>
+                        <input type="text" id="remoteUrl" placeholder="ভিডিও লিঙ্ক এখানে দিন...">
+                        <button class="btn-action-main btn-link" style="margin-top:10px; height: 45px;" onclick="uploadFromUrl()"><i class="fa-solid fa-cloud-arrow-down"></i> Save from Link</button>
                     </div>
                 </div>
-
-                <!-- Progress Bar -->
-                <div id="upload-progress-container">
-                    <div id="progress-bar"></div>
-                    <div id="progress-text">0% Processing...</div>
-                </div>
-
-                <div class="filter-row">
-                    <div class="search-box">
-                        <i class="fa-solid fa-search"></i>
-                        <input type="text" id="vSearch" placeholder="Search videos..." oninput="renderUI()">
-                    </div>
-                    <select class="sort-select" id="vSort" onchange="renderUI()">
-                        <option value="new">Newest</option>
-                        <option value="old">Oldest</option>
-                    </select>
-                </div>
+                <div id="upload-progress-container"><div id="progress-bar"></div><div id="progress-text">0% Processing...</div></div>
             </div>
-
             <div class="video-grid" id="videoGrid"></div>
         </div>
-
-        <!-- Section: Settings -->
         <div id="settings-sec" class="page-section">
             <div class="archive-header">
                 <h3>Settings</h3>
@@ -195,110 +79,62 @@
                 <button class="btn-action-main" style="margin-top:10px; background:#334155; color:#fff;" onclick="location.reload()">Refresh App</button>
             </div>
         </div>
-
     </div>
-
-    <!-- Bottom Nav -->
     <div class="bottom-nav">
         <button class="nav-btn active" onclick="tab('home-sec', this)"><i class="fa-solid fa-house"></i>Home</button>
         <button class="nav-btn" onclick="tab('upload-sec', this)"><i class="fa-solid fa-folder-open"></i>Files</button>
         <button class="nav-btn" onclick="tab('settings-sec', this)"><i class="fa-solid fa-gear"></i>Settings</button>
     </div>
-
-    <input type="hidden" id="uc-widget">
-
     <script>
         let videos = JSON.parse(localStorage.getItem('mynul_videos')) || [];
-
         function tab(id, el) {
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
         }
-
-        // গ্যালারি থেকে আপলোড
         function openGalleryUploader() {
-            uploadcare.openDialog(null, { publicKey: '47591ac5fd5756296d19', tabs: 'file' })
-            .done(handleUpload);
+            uploadcare.openDialog(null, { publicKey: '47591ac5fd5756296d19', tabs: 'file' }).done(handleUpload);
         }
-
-        // লিঙ্ক থেকে সরাসরি আপলোড (Remote Upload)
         function uploadFromUrl() {
             const url = document.getElementById('remoteUrl').value.trim();
             if(!url.startsWith('http')) return alert('সঠিক ভিডিও লিঙ্ক দিন!');
-            
-            // Uploadcare API ব্যবহার করে লিঙ্ক থেকে ফাইল সেভ করা
             const file = uploadcare.fileFrom('url', url);
             handleUpload(file);
-            document.getElementById('remoteUrl').value = ''; // ক্লিয়ার বক্স
+            document.getElementById('remoteUrl').value = '';
         }
-
         function handleUpload(file) {
-            const progContainer = document.getElementById('upload-progress-container');
-            const progBar = document.getElementById('progress-bar');
-            const progText = document.getElementById('progress-text');
-
-            progContainer.style.display = 'block';
-
+            const pc = document.getElementById('upload-progress-container');
+            const pb = document.getElementById('progress-bar');
+            const pt = document.getElementById('progress-text');
+            pc.style.display = 'block';
             file.progress(info => {
                 let p = Math.round(info.progress * 100);
-                progBar.style.width = p + '%';
-                progText.innerText = p + '% Processing...';
+                pb.style.width = p + '%';
+                pt.innerText = p + '% Processing...';
             });
-
             file.done(info => {
-                const newVid = {
-                    id: info.uuid,
-                    name: info.name || "Remote Video",
-                    url: info.cdnUrl,
-                    date: new Date().getTime()
-                };
+                const newVid = { id: info.uuid, name: info.name || "Remote Video", url: info.cdnUrl, date: new Date().getTime() };
                 videos.unshift(newVid);
                 localStorage.setItem('mynul_videos', JSON.stringify(videos));
-                
-                progContainer.style.display = 'none';
+                pc.style.display = 'none';
                 renderUI();
-                alert('সফলভাবে আপনার প্রোফাইলে সেভ হয়েছে!');
+                alert('সফলভাবে সেভ হয়েছে!');
             });
         }
-
         function renderUI() {
             const grid = document.getElementById('videoGrid');
-            const term = document.getElementById('vSearch').value.toLowerCase();
-            const sort = document.getElementById('vSort').value;
-
-            if(sort === 'new') videos.sort((a,b) => b.date - a.date);
-            else videos.sort((a,b) => a.date - b.date);
-
-            const filtered = videos.filter(v => v.name.toLowerCase().includes(term));
             grid.innerHTML = '';
             document.getElementById('count-total').innerText = videos.length;
-
-            if(filtered.length === 0) {
+            if(videos.length === 0) {
                 grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:var(--text-muted);">No files found.</div>';
                 return;
             }
-
-            filtered.forEach(v => {
+            videos.forEach(v => {
                 const date = new Date(v.date).toLocaleDateString('bn-BD');
-                grid.innerHTML += `
-                    <div class="video-card">
-                        <div class="card-thumb"><i class="fa-solid fa-play"></i></div>
-                        <div class="card-body">
-                            <div class="v-title">${v.name}</div>
-                            <div class="v-date">${date}</div>
-                        </div>
-                        <div class="card-actions">
-                            <a href="${v.url}" target="_blank" class="btn-action bg-cyan"><i class="fa-solid fa-play"></i></a>
-                            <button class="btn-action bg-blue" onclick="copyLink('${v.url}')"><i class="fa-solid fa-link"></i></button>
-                            <button class="btn-action bg-red" onclick="deleteVideo('${v.id}')"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </div>
-                `;
+                grid.innerHTML += `<div class="video-card"><div class="card-thumb"><i class="fa-solid fa-play"></i></div><div class="card-body"><div class="v-title">${v.name}</div><div class="v-date">${date}</div></div><div class="card-actions"><a href="${v.url}" target="_blank" class="btn-action bg-cyan"><i class="fa-solid fa-play"></i></a><button class="btn-action bg-blue" onclick="copyLink('${v.url}')"><i class="fa-solid fa-link"></i></button><button class="btn-action bg-red" onclick="deleteVideo('${v.id}')"><i class="fa-solid fa-trash"></i></button></div></div>`;
             });
         }
-
         function deleteVideo(id) {
             if(confirm('মুছে ফেলতে চান?')) {
                 videos = videos.filter(v => v.id !== id);
@@ -306,7 +142,6 @@
                 renderUI();
             }
         }
-
         function clearAllData() {
             if(confirm('সব লিস্ট মুছে ফেলবেন?')) {
                 localStorage.removeItem('mynul_videos');
@@ -314,12 +149,17 @@
                 renderUI();
             }
         }
-
         function copyLink(url) {
-            navigator.clipboard.writeText(url).then(() => alert('লিঙ্ক কপি হয়েছে!'));
+            const temp = document.createElement('input');
+            document.body.appendChild(temp);
+            temp.value = url;
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            alert('লিঙ্ক কপি হয়েছে!');
         }
-
         window.onload = renderUI;
     </script>
+    <div style="display:none;"><b:section id="main" showaddelement="false"/></div>
 </body>
     </html>
