@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mynul.mg - Free Video Archive</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Uploadcare Widget -->
+    <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+
+    <style>
+        :root { --primary: #38bdf8; --bg: #0f172a; --card: #1e293b; }
+        body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; }
+        
+        /* Navbar */
+        .navbar { background: var(--card); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; }
+        
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        
+        /* Upload Section */
+        .upload-box { background: var(--card); padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05); }
+        .uploadcare--widget__button_type_open { background: var(--primary) !important; border-radius: 10px !important; padding: 12px 25px !important; color: #000 !important; font-weight: 700 !important; }
+
+        /* Video List */
+        .video-item { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.05); }
+        .video-info { display: flex; align-items: center; gap: 15px; }
+        .video-info i { font-size: 24px; color: var(--primary); }
+        .video-title { font-size: 14px; font-weight: 600; color: #fff; }
+        
+        .btn-dl { background: #22c55e; color: #fff; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700; transition: 0.3s; }
+        .btn-dl:hover { background: #16a34a; }
+
+        .user-section { font-size: 14px; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="logo">mynul.mg</a>
+        <div class="user-section">
+            <i class="fa-solid fa-circle-user"></i> Admin
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Upload Card -->
+        <div class="upload-box">
+            <h1>ভিডিও আপলোড করুন</h1>
+            <p style="color: #94a3b8; font-size: 13px;">আপনার গ্যালারি থেকে ভিডিও শেয়ার করুন সারাজীবনের জন্য।</p>
+            <div style="margin-top: 20px;">
+                <input type="hidden" role="uploadcare-uploader" 
+                       data-public-key="47591ac5fd5756296d19" 
+                       data-tabs="file" id="uploader">
+            </div>
+        </div>
+
+        <!-- Video Archive List -->
+        <h3><i class="fa-solid fa-clapperboard"></i> সাম্প্রতিক আপলোডসমূহ</h3>
+        <div id="videoList">
+            <!-- ভিডিও এখানে জমা হবে -->
+        </div>
+    </div>
+
+    <script>
+        const widget = uploadcare.Widget('#uploader');
+        const videoListContainer = document.getElementById('videoList');
+
+        // ভিডিও আপলোড সফল হলে
+        widget.onUploadComplete(function(info) {
+            const videoData = {
+                name: info.name,
+                url: `https://ucarecdn.com/${info.uuid}/video.mp4`,
+                date: new Date().toLocaleDateString()
+            };
+            
+            saveVideo(videoData);
+            displayVideos();
+        });
+
+        // ভিডিও লোকাল স্টোরেজে সেভ করা (ব্রাউজারে জমা থাকবে)
+        function saveVideo(video) {
+            let videos = JSON.parse(localStorage.getItem('mynul_videos')) || [];
+            videos.unshift(video);
+            localStorage.setItem('mynul_videos', JSON.stringify(videos));
+        }
+
+        // ভিডিও লিস্ট দেখানো
+        function displayVideos() {
+            let videos = JSON.parse(localStorage.getItem('mynul_videos')) || [];
+            videoListContainer.innerHTML = '';
+            
+            if(videos.length === 0) {
+                videoListContainer.innerHTML = '<p style="color:#64748b; font-size:13px; text-align:center;">এখনও কোনো ভিডিও আপলোড করা হয়নি।</p>';
+                return;
+            }
+
+            videos.forEach(vid => {
+                const item = document.createElement('div');
+                item.className = 'video-item';
+                item.innerHTML = `
+                    <div class="video-info">
+                        <i class="fa-solid fa-file-video"></i>
+                        <div>
+                            <div class="video-title">${vid.name}</div>
+                            <div style="font-size:11px; color:#64748b;">${vid.date}</div>
+                        </div>
+                    </div>
+                    <a href="${vid.url}" target="_blank" class="btn-dl">Download</a>
+                `;
+                videoListContainer.appendChild(item);
+            });
+        }
+
+        // পেজ লোড হলে ভিডিও দেখানো
+        window.onload = displayVideos;
+    </script>
+</body>
+  </html>
