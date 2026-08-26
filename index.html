@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>mynul.mg - Unlimited Storage & Live Tracker</title>
+    <title>mynul.mg - Real Cloud Storage</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Uploadcare Configuration -->
+    <!-- Uploadcare Script -->
     <script>
         UPLOADCARE_PUBLIC_KEY = '47591ac5fd5756296d19';
     </script>
@@ -23,49 +23,80 @@
             --danger: #ef4444;
             --success: #22c55e;
             --text-muted: #94a3b8;
-            --live: #22c55e;
         }
 
         * { box-sizing: border-box; }
-        body { background-color: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 100px; overflow-x: hidden; }
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding-bottom: 100px;
+            overflow-x: hidden;
+        }
 
-        /* Navbar */
-        .navbar { background: var(--card); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; }
+        /* --- Navbar --- */
+        .navbar {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky; top: 0; z-index: 1000;
+        }
         .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; }
 
         .container { max-width: 800px; margin: 0 auto; padding: 15px; }
+
+        /* --- Navigation Logic --- */
         .section { display: none; }
         .section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Cards */
-        .card { background: var(--card); padding: 25px 20px; border-radius: 25px; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
-        
-        /* Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; }
-        .stat-item b { font-size: 18px; color: var(--primary); display: block; }
-        .stat-item small { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+        /* --- UI Components --- */
+        .card {
+            background: var(--card);
+            padding: 25px 20px;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
 
-        /* Live Counter Pulse */
-        .live-indicator { display: inline-flex; align-items: center; gap: 6px; background: rgba(34, 197, 94, 0.1); padding: 4px 10px; border-radius: 20px; color: var(--success); font-size: 11px; font-weight: 700; margin-bottom: 15px; border: 1px solid rgba(34, 197, 94, 0.2); }
-        .pulse { width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block; position: relative; }
-        .pulse::after { content: ''; width: 100%; height: 100%; background: var(--success); border-radius: 50%; position: absolute; top: 0; left: 0; animation: livePulse 1.5s infinite; }
-        @keyframes livePulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+        /* Live Indicator (Real) */
+        .live-wrap { 
+            margin-bottom: 15px;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 10px;
+            border-radius: 15px;
+            display: inline-block;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+        .pulse-dot {
+            width: 8px; height: 8px; background: var(--success);
+            border-radius: 50%; display: inline-block;
+            margin-right: 5px; position: relative;
+        }
+        .pulse-dot::after {
+            content: ''; width: 100%; height: 100%; background: var(--success);
+            border-radius: 50%; position: absolute; top: 0; left: 0;
+            animation: pLive 1.5s infinite;
+        }
+        @keyframes pLive { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
 
-        /* Storage Meter */
-        .storage-container { width: 100%; background: rgba(0,0,0,0.3); height: 14px; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.3); }
-        .storage-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #818cf8, #38bdf8); background-size: 200% 100%; animation: moveGradient 3s linear infinite; }
-        @keyframes moveGradient { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
-
-        .badge-premium { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #000; padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; }
+        /* Storage Bar */
+        .storage-bar { width: 100%; background: rgba(0,0,0,0.3); height: 14px; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.2); }
+        .storage-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #818cf8, #38bdf8); background-size: 200% 100%; animation: barMove 3s linear infinite; }
+        @keyframes barMove { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
         /* Buttons */
         .btn { width: 100%; border: none; padding: 16px; border-radius: 15px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; margin-bottom: 12px; }
         .btn-blue { background: var(--primary); color: #000; }
         .btn-green { background: var(--success); color: #fff; }
 
-        /* Progress Bar */
-        #prog-box { display: none; margin-top: 20px; background: rgba(255,255,255,0.1); border-radius: 12px; height: 35px; position: relative; overflow: hidden; border: 1px solid var(--primary); }
+        /* Progress Area */
+        #prog-box { display: none; margin-top: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; height: 35px; position: relative; overflow: hidden; border: 1px solid var(--primary); }
         #prog-bar { height: 100%; width: 0%; background: var(--primary); transition: width 0.3s; }
         #prog-text { position: absolute; width: 100%; text-align: center; top: 8px; font-size: 12px; font-weight: 800; color: #fff; }
 
@@ -75,7 +106,7 @@
         .v-thumb { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; font-size: 30px; color: rgba(255,255,255,0.1); }
         .v-body { padding: 12px; }
         .v-title { font-size: 12px; font-weight: 600; height: 34px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; margin-bottom: 5px; }
-
+        
         .v-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
         .act-btn { border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #fff; font-size: 12px; text-align: center; }
         .bg-cyan { background: var(--primary); color: #000; }
@@ -88,6 +119,7 @@
         .nav-tab i { font-size: 22px; display: block; margin-bottom: 3px; }
         .nav-tab.active { color: var(--primary); }
 
+        .uploadcare--widget { display: none !important; }
         @media (max-width: 480px) { .grid { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
@@ -95,7 +127,7 @@
 
     <nav class="navbar">
         <a href="#" class="logo">mynul.mg</a>
-        <div class="badge-premium">Lifetime Unlimited</div>
+        <div style="font-size: 10px; color: var(--primary); border: 1px solid; padding: 2px 10px; border-radius: 20px; font-weight: 700;">PRO ACCOUNT</div>
     </nav>
 
     <div class="container">
@@ -103,33 +135,25 @@
         <!-- SECTION: HOME -->
         <div id="home-sec" class="section active">
             <div class="card">
-                <div class="live-indicator">
-                    <span class="pulse"></span> <span id="live-users">24</span> ACTIVE NOW
+                <div class="live-wrap">
+                    <span class="pulse-dot"></span>
+                    <!-- REAL TIME TRACKER WIDGET (Whos.amung.us) -->
+                    <script id="_waumul">var _wau = _wa || []; _wau.push(["small", "mynulmg", "mul"]);</script>
+                    <script async src="//waust.at/s.js"></script>
+                    <span style="font-size: 12px; font-weight: 800; color: var(--success); margin-left: 5px;">REAL ACTIVE NOW</span>
                 </div>
                 
-                <h2 style="margin: 0; letter-spacing: 1px; font-size: 20px;">CLOUDFLARE SECURE STORAGE</h2>
+                <h2 style="margin: 0; letter-spacing: 1px; font-size: 18px; color: var(--primary);">LIFETIME UNLIMITED CLOUD</h2>
                 
-                <div class="storage-container">
-                    <div class="storage-fill"></div>
-                </div>
+                <div class="storage-bar"><div class="storage-fill"></div></div>
                 <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
-                    <span>ব্যবহৃত: <b id="used-txt" style="color:#fff;">0 MB</b></span>
-                    <span>লিমিট: <b style="color:var(--primary);">UNLIMITED</b></span>
+                    <span>Space Used: <b id="used-val" style="color:#fff;">0 MB</b></span>
+                    <span>Status: <b style="color:var(--success);">ACTIVE</b></span>
                 </div>
 
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <b id="total-count">0</b>
-                        <small>Files</small>
-                    </div>
-                    <div style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 5px;" class="stat-item">
-                        <b id="visitor-count">1.2K</b>
-                        <small>Visitors</small>
-                    </div>
-                    <div style="border-left: 1px solid rgba(255,255,255,0.1); padding-left: 5px;" class="stat-item">
-                        <b style="color: var(--success);">$0.00</b>
-                        <small>Income</small>
-                    </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                    <div><b id="total-files" style="font-size: 18px; color: var(--primary);">0</b><br><small style="font-size: 9px; color: var(--text-muted);">TOTAL FILES</small></div>
+                    <div style="border-left: 1px solid rgba(255,255,255,0.1);"><b style="font-size: 18px; color: var(--success);">$0.00</b><br><small style="font-size: 9px; color: var(--text-muted);">EARNINGS</small></div>
                 </div>
             </div>
         </div>
@@ -137,10 +161,10 @@
         <!-- SECTION: UPLOADS -->
         <div id="upload-sec" class="section">
             <div class="card">
-                <button class="btn btn-blue" onclick="fromGallery()"><i class="fa-solid fa-images"></i> গ্যালারি থেকে আপলোড</button>
-                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; border: 1px solid #334155;">
-                    <input type="text" id="linkInput" placeholder="লিঙ্ক পেস্ট করুন..." style="width:100%; background:transparent; border:none; color:#fff; text-align:center; outline:none;">
-                    <button class="btn btn-green" style="margin-top:10px; height: 45px;" onclick="fromUrl()"><i class="fa-solid fa-link"></i> লিঙ্ক থেকে সেভ</button>
+                <button class="btn btn-blue" onclick="openGallery()"><i class="fa-solid fa-images"></i> Gallery Upload</button>
+                <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; border: 1px solid #334155; margin-top: 10px;">
+                    <input type="text" id="urlInput" placeholder="Paste video link..." style="width:100%; background:transparent; border:none; color:#fff; text-align:center; outline:none; font-size: 14px;">
+                    <button class="btn btn-green" style="margin-top:10px; height: 45px;" onclick="openUrl()"><i class="fa-solid fa-link"></i> Save from URL</button>
                 </div>
                 <div id="prog-box"><div id="prog-bar"></div><div id="prog-text">0% Processing...</div></div>
             </div>
@@ -150,12 +174,10 @@
         <!-- SECTION: SETTINGS -->
         <div id="settings-sec" class="section">
             <div class="card" style="text-align: left;">
-                <h3 style="margin-top: 0;">System Info</h3>
-                <p style="font-size: 13px;">Status: <b style="color:var(--success);">Server Online</b></p>
-                <p style="font-size: 13px;">Storage: <b>Unlimited Enterprise</b></p>
-                <hr style="opacity: 0.1; margin: 20px 0;">
-                <button class="btn" style="background: var(--danger); color:#fff;" onclick="clearHistory()">লিস্ট মুছুন</button>
-                <button class="btn" style="background: #334155; color:#fff;" onclick="location.reload()">অ্যাপ রিফ্রেশ</button>
+                <h3 style="margin: 0; color: var(--primary);">System Dashboard</h3>
+                <p style="font-size: 13px; margin-bottom: 20px;">Server: <b>Uploadcare Enterprise</b></p>
+                <button class="btn" style="background: var(--danger); color:#fff;" onclick="resetDB()">Clear Data</button>
+                <button class="btn" style="background: #334155; color:#fff;" onclick="location.reload()">Refresh App</button>
             </div>
         </div>
 
@@ -163,42 +185,30 @@
 
     <!-- Navigation -->
     <div class="bottom-nav">
-        <button class="nav-tab active" onclick="go('home-sec', this)"><i class="fa-solid fa-house"></i>Home</button>
-        <button class="nav-tab" onclick="go('upload-sec', this)"><i class="fa-solid fa-folder-open"></i>Files</button>
-        <button class="nav-tab" onclick="go('settings-sec', this)"><i class="fa-solid fa-gear"></i>Settings</button>
+        <button class="nav-tab active" onclick="nav('home-sec', this)"><i class="fa-solid fa-house"></i>Home</button>
+        <button class="nav-tab" onclick="nav('upload-sec', this)"><i class="fa-solid fa-folder-open"></i>Files</button>
+        <button class="nav-tab" onclick="nav('settings-sec', this)"><i class="fa-solid fa-gear"></i>Settings</button>
     </div>
 
     <script>
         let db = JSON.parse(localStorage.getItem('mynul_videos')) || [];
 
-        function go(id, el) {
+        function nav(id, el) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
             el.classList.add('active');
         }
 
-        // --- Live Active Users Generator ---
-        function updateLiveUsers() {
-            // বস্, এটি রিয়েল টাইম ফিল দিবে যা ৩ থেকে ৫ সেকেন্ড পর পর সংখ্যা পরিবর্তন করবে
-            const min = 18; const max = 56;
-            const live = Math.floor(Math.random() * (max - min + 1) + min);
-            document.getElementById('live-users').innerText = live;
-            
-            const totalVis = Math.floor(Math.random() * (2000 - 1000 + 1) + 1000);
-            document.getElementById('visitor-count').innerText = (totalVis/1000).toFixed(1) + "K";
-        }
-        setInterval(updateLiveUsers, 4000);
-
-        function fromGallery() { uploadcare.openDialog(null, { tabs: 'file' }).done(uploadFile); }
-        function fromUrl() {
-            const val = document.getElementById('linkInput').value.trim();
-            if(!val.startsWith('http')) return alert('সঠিক লিঙ্ক দিন!');
-            uploadFile(uploadcare.fileFrom('url', val));
-            document.getElementById('linkInput').value = '';
+        function openGallery() { uploadcare.openDialog(null, { tabs: 'file' }).done(doUpload); }
+        function openUrl() {
+            const v = document.getElementById('urlInput').value.trim();
+            if(!v.startsWith('http')) return alert('Invalid Link!');
+            doUpload(uploadcare.fileFrom('url', v));
+            document.getElementById('urlInput').value = '';
         }
 
-        function uploadFile(file) {
+        function doUpload(file) {
             const box = document.getElementById('prog-box');
             const bar = document.getElementById('prog-bar');
             const txt = document.getElementById('prog-text');
@@ -209,45 +219,45 @@
                 txt.innerText = p + '% Processing...';
             });
             file.done(info => {
-                const data = { id: info.uuid, name: info.name || "Remote File", url: info.cdnUrl, size: info.size, time: new Date().getTime() };
-                db.unshift(data);
+                const item = { id: info.uuid, name: info.name || "Cloud File", url: info.cdnUrl, size: info.size, date: new Date().getTime() };
+                db.unshift(item);
                 localStorage.setItem('mynul_videos', JSON.stringify(db));
                 box.style.display = 'none';
-                showUI();
+                drawUI();
+                alert('Saved successfully!');
             });
         }
 
-        function formatBytes(bytes, decimals = 2) {
+        function formatSize(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
-            const dm = decimals < 0 ? 0 : decimals;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
-        function showUI() {
+        function drawUI() {
             const grid = document.getElementById('vGrid');
-            let totalUsed = 0;
-            db.sort((a,b) => b.time - a.time);
+            let totalSize = 0;
+            db.sort((a,b) => b.date - a.date);
             grid.innerHTML = '';
             db.forEach(v => {
-                totalUsed += v.size || 0;
-                grid.innerHTML += `<div class="v-card"><div class="v-thumb"><i class="fa-solid fa-play"></i></div><div class="v-body"><div class="v-title">${v.name}</div></div><div class="v-actions"><a href="${v.url}" target="_blank" class="act-btn bg-cyan"><i class="fa-solid fa-play"></i></a><button class="act-btn bg-indigo" onclick="copy('${v.url}')"><i class="fa-solid fa-link"></i></button><button class="act-btn bg-red" onclick="remove('${v.id}')"><i class="fa-solid fa-trash"></i></button></div></div>`;
+                totalSize += (v.size || 0);
+                grid.innerHTML += `<div class="v-card"><div class="v-thumb"><i class="fa-solid fa-play"></i></div><div class="v-body"><div class="v-title">${v.name}</div></div><div class="v-actions"><a href="${v.url}" target="_blank" class="act-btn bg-cyan"><i class="fa-solid fa-play"></i></a><button class="act-btn bg-indigo" onclick="copy('${v.url}')"><i class="fa-solid fa-link"></i></button><button class="act-btn bg-red" onclick="del('${v.id}')"><i class="fa-solid fa-trash"></i></button></div></div>`;
             });
-            document.getElementById('used-txt').innerText = formatBytes(totalUsed);
-            document.getElementById('total-count').innerText = db.length;
-            if(db.length === 0) grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:var(--text-muted);">No files found.</div>';
+            document.getElementById('used-val').innerText = formatSize(totalSize);
+            document.getElementById('total-files').innerText = db.length;
+            if(db.length === 0) grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--text-muted);">Empty.</div>';
         }
 
-        function remove(id) { if(confirm('মুছবেন?')) { db = db.filter(v => v.id !== id); localStorage.setItem('mynul_videos', JSON.stringify(db)); showUI(); } }
-        function clearHistory() { if(confirm('সব মুছবেন?')) { localStorage.removeItem('mynul_videos'); db = []; showUI(); } }
+        function del(id) { if(confirm('Delete?')) { db = db.filter(v => v.id !== id); localStorage.setItem('mynul_videos', JSON.stringify(db)); drawUI(); } }
+        function resetDB() { if(confirm('Reset all?')) { localStorage.removeItem('mynul_videos'); db = []; drawUI(); } }
         function copy(url) {
-            const inp = document.createElement('input'); document.body.appendChild(inp);
-            inp.value = url; inp.select(); document.execCommand('copy');
-            document.body.removeChild(inp); alert('লিঙ্ক কপি হয়েছে!');
+            const temp = document.createElement('input'); document.body.appendChild(temp);
+            temp.value = url; temp.select(); document.execCommand('copy');
+            document.body.removeChild(temp); alert('Copied!');
         }
-        window.onload = () => { showUI(); updateLiveUsers(); };
+        window.onload = drawUI;
     </script>
 </body>
 </html>
