@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>mynul.mg - Fast Cloud Storage</title>
+    <title>mynul.mg - Real Cloud Storage</title>
     
     <!-- Google Fonts & Font Awesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -65,7 +65,7 @@
             text-align: center;
         }
 
-        /* Real Live Tracker Box */
+        /* Live Status Indicator */
         .live-status { 
             margin-bottom: 15px;
             background: rgba(34, 197, 94, 0.1);
@@ -108,12 +108,11 @@
         .bg-red { background: var(--danger); }
 
         /* Bottom Menu Nav */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
         .nav-tab { background: none; border: none; color: var(--text-muted); font-size: 10px; cursor: pointer; text-align: center; }
         .nav-tab i { font-size: 22px; display: block; margin-bottom: 3px; }
         .nav-tab.active { color: var(--primary); }
 
-        /* AdBlock Styling */
         .uploadcare--widget { display: none !important; }
         @media (max-width: 480px) { .grid { grid-template-columns: 1fr 1fr; } }
     </style>
@@ -122,70 +121,60 @@
 
     <nav class="navbar">
         <a href="#" class="logo">mynul.mg</a>
-        <div class="active-badge">FAST CLOUD</div>
+        <div class="active-badge">ULTRA CLOUD</div>
     </nav>
 
     <div class="container">
         
-        <!-- SECTION: HOME -->
         <div id="home-sec" class="section active">
             <div class="card">
                 <div class="live-status">
                     <span class="dot"></span>
-                    <!-- REAL TIME TRACKER SCRIPT -->
                     <script id="_waumul">var _wau = _wa || []; _wau.push(["small", "mynulmg", "mul"]);</script>
                     <script async src="//waust.at/s.js"></script>
                     <span style="font-size: 11px; font-weight: 800; color: var(--success); margin-left: 5px;">REAL ACTIVE NOW</span>
                 </div>
                 
-                <h2 style="margin: 0; letter-spacing: 1px; font-size: 18px; color: var(--primary);">UNLIMITED HIGH-SPEED STORAGE</h2>
+                <h2 style="margin: 0; letter-spacing: 1px; font-size: 18px; color: var(--primary);">UNLIMITED STORAGE</h2>
                 
                 <div class="storage-bar"><div class="storage-fill"></div></div>
                 <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted);">
-                    <span>ব্যবহৃত জায়গা: <b id="used-val" style="color:#fff;">0 MB</b></span>
-                    <span>সার্ভার স্পিড: <b style="color:var(--success);">FAST (CDN)</b></span>
+                    <span>Used: <b id="used-val" style="color:#fff;">0 MB</b></span>
+                    <span>Status: <b style="color:var(--success);">CONNECTED</b></span>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
-                    <div><b id="total-files" style="font-size: 18px; color: var(--primary);">0</b><br><small style="font-size: 9px; color: var(--text-muted);">TOTAL FILES</small></div>
-                    <div style="border-left: 1px solid rgba(255,255,255,0.1);"><b style="font-size: 18px; color: var(--success);">$0.00</b><br><small style="font-size: 9px; color: var(--text-muted);">ACCOUNT BAL</small></div>
+                    <div><b id="total-files" style="font-size: 18px; color: var(--primary);">0</b><br><small style="font-size: 9px; color: var(--text-muted);">FILES</small></div>
+                    <div><b style="font-size: 18px; color: var(--success);">$0.00</b><br><small style="font-size: 9px; color: var(--text-muted);">EARNINGS</small></div>
                 </div>
             </div>
         </div>
 
-        <!-- SECTION: UPLOADS -->
         <div id="upload-sec" class="section">
             <div class="card">
-                <button class="btn btn-blue" onclick="openGallery()"><i class="fa-solid fa-images"></i> গ্যালারি থেকে আপলোড</button>
-                
+                <button class="btn btn-blue" onclick="openGallery()"><i class="fa-solid fa-images"></i> Gallery Upload</button>
                 <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; border: 1px solid #334155; margin-top: 10px;">
-                    <input type="text" id="urlInput" placeholder="অন্য সাইটের ভিডিও লিঙ্ক দিন..." style="width:100%; background:transparent; border:none; color:#fff; text-align:center; outline:none; font-size: 14px;">
-                    <button class="btn btn-green" style="margin-top:10px; height: 45px;" onclick="openUrl()"><i class="fa-solid fa-link"></i> লিঙ্ক থেকে সেভ করুন</button>
+                    <input type="text" id="urlInput" placeholder="লিঙ্ক পেস্ট করুন..." style="width:100%; background:transparent; border:none; color:#fff; text-align:center; outline:none; font-size: 14px;">
+                    <button class="btn btn-green" style="margin-top:10px; height: 45px;" onclick="openUrl()"><i class="fa-solid fa-link"></i> Save from URL</button>
                 </div>
-
                 <div id="prog-box"><div id="prog-bar"></div><div id="prog-text">0% Processing...</div></div>
             </div>
-
             <div style="margin: 15px 5px;">
-                <input type="text" id="searchInp" placeholder="ভিডিও খুঁজুন..." oninput="drawUI()" style="width:100%; background:var(--card); border:1px solid rgba(255,255,255,0.1); padding:12px; border-radius:12px; color:#fff; outline:none;">
+                <input type="text" id="searchInp" placeholder="Search files..." oninput="drawUI()" style="width:100%; background:var(--card); border:1px solid rgba(255,255,255,0.1); padding:12px; border-radius:12px; color:#fff; outline:none;">
             </div>
-
             <div class="grid" id="vGrid"></div>
         </div>
 
-        <!-- SECTION: SETTINGS -->
         <div id="settings-sec" class="section">
             <div class="card" style="text-align: left;">
-                <h3 style="margin: 0; color: var(--primary);">একাউন্ট সেটিংস</h3>
-                <p style="font-size: 13px; margin-bottom: 20px;">Enterprise API: <b style="color:var(--success);">Active (4759...)</b></p>
-                <button class="btn" style="background: var(--danger); color:#fff;" onclick="resetDB()">Clear App History</button>
+                <h3 style="margin: 0; color: var(--primary);">Settings</h3>
+                <button class="btn" style="background: var(--danger); color:#fff;" onclick="resetDB()">Clear Data (লিস্ট মুছুন)</button>
                 <button class="btn" style="background: #334155; color:#fff;" onclick="location.reload()">Refresh App</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Navigation -->
     <div class="bottom-nav">
         <button class="nav-tab active" onclick="nav('home-sec', this)"><i class="fa-solid fa-house"></i>Home</button>
         <button class="nav-tab" onclick="nav('upload-sec', this)"><i class="fa-solid fa-folder-open"></i>Files</button>
@@ -206,7 +195,7 @@
         
         function openUrl() {
             const v = document.getElementById('urlInput').value.trim();
-            if(!v.startsWith('http')) return alert('সঠিক লিঙ্ক দিন!');
+            if(!v.startsWith('http')) return alert('Invalid Link!');
             doUpload(uploadcare.fileFrom('url', v));
             document.getElementById('urlInput').value = '';
         }
@@ -220,25 +209,18 @@
             file.progress(i => {
                 let p = Math.round(i.progress * 100);
                 bar.style.width = p + '%';
-                txt.innerText = p + '% আপলোড হচ্ছে...';
+                txt.innerText = p + '% Processing...';
             });
 
             file.done(info => {
-                const item = { id: info.uuid, name: info.name || "Cloud File", url: info.cdnUrl, size: info.size, date: new Date().getTime() };
+                // লিঙ্ক ফিক্স করা হলো (CDN URL ব্যবহার করে)
+                const item = { id: info.uuid, name: info.name || "File", url: info.cdnUrl, size: info.size, date: new Date().getTime() };
                 db.unshift(item);
                 localStorage.setItem('mynul_videos', JSON.stringify(db));
                 box.style.display = 'none';
                 drawUI();
-                alert('সফলভাবে সেভ হয়েছে বস্!');
+                alert('Saved successfully!');
             });
-        }
-
-        function formatSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
 
         function drawUI() {
@@ -250,28 +232,24 @@
             const filtered = db.filter(v => v.name.toLowerCase().includes(term));
             
             grid.innerHTML = '';
-            db.forEach(v => totalSize += (v.size || 0));
+            db.forEach(v => {
+                totalSize += (v.size || 0);
+                // প্রতিটি লিঙ্কে যদি কোনো ভুল থাকে তা অটোমেটিক ফিক্স করবে
+                const fixedUrl = v.url.replace('ucarecd.net', 'ucarecdn.com');
+                grid.innerHTML += `<div class="v-card"><div class="v-thumb"><i class="fa-solid fa-play"></i></div><div class="v-body"><div class="v-title">${v.name}</div></div><div class="v-actions"><a href="${fixedUrl}" target="_blank" class="act-btn bg-cyan"><i class="fa-solid fa-play"></i></a><button class="act-btn bg-indigo" onclick="copy('${fixedUrl}')"><i class="fa-solid fa-link"></i></button><button class="act-btn bg-red" onclick="del('${v.id}')"><i class="fa-solid fa-trash"></i></button></div></div>`;
+            });
 
-            if(filtered.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px; color:var(--text-muted);">No videos found.</div>';
-            } else {
-                filtered.forEach(v => {
-                    grid.innerHTML += `<div class="v-card"><div class="v-thumb"><i class="fa-solid fa-play"></i></div><div class="v-body"><div class="v-title">${v.name}</div></div><div class="v-actions"><a href="${v.url}" target="_blank" class="act-btn bg-cyan"><i class="fa-solid fa-play"></i></a><button class="act-btn bg-indigo" onclick="copy('${v.url}')"><i class="fa-solid fa-link"></i></button><button class="act-btn bg-red" onclick="del('${v.id}')"><i class="fa-solid fa-trash"></i></button></div></div>`;
-                });
-            }
-
-            document.getElementById('used-val').innerText = formatSize(totalSize);
+            document.getElementById('used-val').innerText = (totalSize / (1024 * 1024)).toFixed(2) + " MB";
             document.getElementById('total-files').innerText = db.length;
         }
 
-        function del(id) { if(confirm('ডিলিট করতে চান?')) { db = db.filter(v => v.id !== id); localStorage.setItem('mynul_videos', JSON.stringify(db)); drawUI(); } }
-        function resetDB() { if(confirm('সব ডাটা কি রিসেট করবেন?')) { localStorage.removeItem('mynul_videos'); db = []; drawUI(); } }
+        function del(id) { if(confirm('Delete?')) { db = db.filter(v => v.id !== id); localStorage.setItem('mynul_videos', JSON.stringify(db)); drawUI(); } }
+        function resetDB() { if(confirm('Reset all?')) { localStorage.removeItem('mynul_videos'); db = []; drawUI(); } }
         function copy(url) {
             const temp = document.createElement('input'); document.body.appendChild(temp);
             temp.value = url; temp.select(); document.execCommand('copy');
-            document.body.removeChild(temp); alert('লিঙ্ক কপি হয়েছে বস্!');
+            document.body.removeChild(temp); alert('Copied!');
         }
-
         window.onload = drawUI;
     </script>
 </body>
