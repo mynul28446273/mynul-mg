@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>mynul.mg - Real Cloud & Live Tracker</title>
+    <title>mynul.mg - Perfect Cloud Video Manager</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Supabase & Uploadcare SDK -->
+    <!-- SDKs (Supabase & Uploadcare) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
 
@@ -45,49 +45,35 @@
         }
         .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; }
         
-        /* Real Online Counter */
-        .online-box {
-            background: rgba(34, 197, 94, 0.1);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .pulse-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; position: relative; }
-        .pulse-dot::after { content: ''; width: 100%; height: 100%; background: var(--success); border-radius: 50%; position: absolute; left: 0; animation: pLive 1.5s infinite; }
-        @keyframes pLive { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
-        #online-count { font-size: 13px; font-weight: 800; color: var(--success); }
+        .live-tag { background: rgba(34, 197, 94, 0.1); padding: 5px 12px; border-radius: 20px; color: var(--success); font-size: 12px; font-weight: 800; border: 1px solid rgba(34, 197, 94, 0.3); display: flex; align-items: center; gap: 8px; }
+        .pulse { width: 8px; height: 8px; background: var(--success); border-radius: 50%; position: relative; }
+        .pulse::after { content: ''; width: 100%; height: 100%; background: var(--success); border-radius: 50%; position: absolute; left: 0; animation: pLive 1.5s infinite; }
+        @keyframes pLive { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
 
         .container { max-width: 800px; margin: 0 auto; padding: 15px; }
 
-        /* --- Page Management --- */
-        .page-section { display: none; }
-        .page-section.active { display: block; animation: fadeIn 0.4s ease; }
+        /* --- Tab Management --- */
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
 
-        /* --- Premium Cards --- */
+        /* --- UI Elements --- */
         .card { background: var(--card); padding: 25px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
         
-        /* Storage Meter */
         .storage-bar { width: 100%; background: rgba(0,0,0,0.3); height: 14px; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.2); }
         .fill-unlimited { height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #22c55e, #38bdf8); background-size: 200% 100%; animation: barMove 3s linear infinite; }
         @keyframes barMove { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
-        /* Buttons */
         .btn { width: 100%; border: none; padding: 16px; border-radius: 15px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; color: #fff; }
         .btn-upload { background: var(--primary); color: #000; margin-bottom: 12px; }
         .btn-save { background: var(--success); }
 
-        /* Progress Area */
-        #prog-box { display: none; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 15px; border: 1px solid var(--primary); }
+        #prog-box { display: none; margin-bottom: 20px; padding: 15px; background: rgba(56, 189, 248, 0.05); border-radius: 15px; border: 1px solid var(--primary); }
         .p-bar-bg { width: 100%; background: rgba(0,0,0,0.3); height: 10px; border-radius: 10px; overflow: hidden; margin-top: 10px; }
         .p-bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
 
-        /* Grid & Cards */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; }
-        .v-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .v-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
         .v-thumb { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .v-title { padding: 10px; font-size: 11px; font-weight: 600; height: 48px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -98,9 +84,9 @@
         .bg-indigo { background: #6366f1; }
         .bg-red { background: var(--danger); }
 
-        /* Bottom Nav */
+        /* --- Bottom Nav --- */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 3000; }
-        .nav-item { background: none; border: none; color: var(--muted); font-size: 10px; cursor: pointer; text-align: center; flex: 1; }
+        .nav-item { background: none; border: none; color: var(--muted); font-size: 10px; cursor: pointer; text-align: center; flex: 1; outline: none; }
         .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
         .nav-item.active { color: var(--primary); }
 
@@ -112,36 +98,36 @@
 
     <nav class="navbar">
         <a href="#" class="logo">mynul.mg</a>
-        <div class="online-box">
-            <span class="pulse-dot"></span> Online: <span id="online-count">1</span>
+        <div class="live-tag">
+            <span class="pulse"></span> Online: <span id="online-count">1</span>
         </div>
     </nav>
 
     <div class="container">
         
-        <!-- PAGE 1: HOME -->
-        <div id="sec-home" class="page-section active">
+        <!-- HOME SECTION -->
+        <div id="sec-home" class="section active">
             <div class="card">
                 <i class="fa-solid fa-infinity" style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"></i>
-                <h2 style="margin: 0; letter-spacing: 1px; font-size: 18px;">UNLIMITED SECURE STORAGE</h2>
+                <h2 style="margin: 0; letter-spacing: 1px; font-size: 18px;">UNLIMITED SECURE CLOUD</h2>
                 <div class="storage-bar"><div class="fill-unlimited"></div></div>
                 <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--muted);">
-                    <span>Used: <b id="used-txt" style="color:#fff;">0 MB</b></span>
+                    <span>Space Used: <b id="used-txt" style="color:#fff;">0 MB</b></span>
                     <span>Status: <b style="color:var(--success);">CONNECTED</b></span>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
                     <div><b id="file-count" style="font-size: 20px; color: var(--primary);">0</b><br><small>Total Files</small></div>
-                    <div><b style="font-size: 20px; color: var(--success);">$0.00</b><br><small>Balance</small></div>
+                    <div><b style="font-size: 20px; color: var(--success);">$0.00</b><br><small>Earnings</small></div>
                 </div>
             </div>
         </div>
 
-        <!-- PAGE 2: FILES -->
-        <div id="sec-files" class="page-section">
+        <!-- FILES SECTION -->
+        <div id="sec-files" class="section">
             <div class="card" style="padding: 15px;">
                 <button class="btn btn-upload" onclick="openGallery()"><i class="fa-solid fa-images"></i> গ্যালারি থেকে আপলোড</button>
                 <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; border: 1px solid #334155;">
-                    <input type="text" id="urlInput" placeholder="ভিডিওর সরাসরি লিঙ্ক দিন..." style="width:100%; background:transparent; border:none; color:#fff; text-align:center; outline:none; font-size: 14px;">
+                    <input type="text" id="urlInput" placeholder="লিঙ্ক পেস্ট করুন..." style="width:100%; background:transparent; border:none; color:#fff; text-align:center; outline:none; font-size: 14px;">
                     <button class="btn btn-save" style="margin-top:10px; height: 45px;" onclick="saveUrl()"><i class="fa-solid fa-link"></i> লিঙ্ক থেকে সেভ করুন</button>
                 </div>
             </div>
@@ -161,28 +147,28 @@
             <div class="grid" id="videoGrid"></div>
         </div>
 
-        <!-- PAGE 3: SETTINGS -->
-        <div id="sec-settings" class="section page-section">
+        <!-- SETTINGS SECTION -->
+        <div id="sec-settings" class="section">
             <div class="card" style="text-align: left;">
-                <h3 style="margin: 0; color: var(--primary);">System Dashboard</h3>
-                <p style="font-size: 13px; margin: 15px 0;">Enterprise Storage: <b style="color:var(--success);">Connected</b></p>
+                <h3 style="margin: 0; color: var(--primary);">System Control</h3>
+                <p style="font-size: 13px; margin: 10px 0;">Enterprise API: <b style="color:var(--success);">Active (CDN Pro)</b></p>
                 <hr style="opacity: 0.1; margin: 20px 0;">
-                <button class="btn" style="background: var(--danger); font-size: 13px;" onclick="clearDB()">Reset History (লিস্ট মুছুন)</button>
-                <button class="btn" style="background: #334155; margin-top: 10px; font-size: 13px;" onclick="location.reload()">Refresh App</button>
+                <button class="btn" style="background: var(--danger); font-size: 13px;" onclick="resetList()">পুরো লিস্ট মুছুন (Reset)</button>
+                <button class="btn" style="background: #334155; margin-top: 10px; font-size: 13px;" onclick="location.reload()">অ্যাপ রিফ্রেশ দিন</button>
             </div>
         </div>
 
     </div>
 
-    <!-- Tab Navigation -->
+    <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <button class="nav-item active" id="nav-home" onclick="nav('sec-home', 'nav-home')"><i class="fa-solid fa-house"></i>Home</button>
-        <button class="nav-item" id="nav-files" onclick="nav('sec-files', 'nav-files')"><i class="fa-solid fa-folder-open"></i>Files</button>
-        <button class="nav-item" id="nav-settings" onclick="nav('sec-settings', 'nav-settings')"><i class="fa-solid fa-gear"></i>Settings</button>
+        <button class="nav-item active" id="btn-home" onclick="navTo('sec-home', 'btn-home')"><i class="fa-solid fa-house"></i>Home</button>
+        <button class="nav-item" id="btn-files" onclick="navTo('sec-files', 'btn-files')"><i class="fa-solid fa-folder-open"></i>Files</button>
+        <button class="nav-item" id="btn-settings" onclick="navTo('sec-settings', 'btn-settings')"><i class="fa-solid fa-gear"></i>Settings</button>
     </div>
 
     <script>
-        // --- সুপাবেস এবং আপলোড কেয়ার ডেটা ---
+        // --- সুপাবেস ডাটা ---
         const SUPABASE_URL = 'https://zsluamkcuzcpnxgmhabx.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_C5D72tFy_0CznaxVbg7xXQ_lcC2Us3i';
         const UC_KEY = '47591ac5fd5756296d19';
@@ -190,17 +176,17 @@
         const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         let videoData = [];
 
-        // ১. ১০০% কাজ করা নেভিগেশন (আইডি দিয়ে ফিক্সড)
-        function nav(secId, navId) {
-            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(secId).classList.add('active');
+        // ১. ১০০% কাজ করা নেভিগেশন ফিক্স
+        function navTo(pageId, navId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
             document.getElementById(navId).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        // ২. রিয়েল টাইম ইউজার কাউন্টার (Supabase Presence)
-        const channel = client.channel('realtime_presence', { config: { presence: { key: 'user' } } });
+        // ২. রিয়েল অনলাইন ইউজার কাউন্টার
+        const channel = client.channel('online_presence', { config: { presence: { key: 'user' } } });
         channel.on('presence', { event: 'sync' }, () => {
             const state = channel.presenceState();
             document.getElementById('online-count').innerText = Object.keys(state).length;
@@ -212,7 +198,7 @@
         function openGallery() { uploadcare.openDialog(null, { publicKey: UC_KEY, tabs: 'file' }).done(file => track(file)); }
         function saveUrl() {
             const url = document.getElementById('urlInput').value.trim();
-            if(!url.startsWith('http')) return alert('সঠিক ভিডিও লিঙ্ক দিন!');
+            if(!url.startsWith('http')) return alert('সঠিক লিঙ্ক দিন!');
             track(uploadcare.fileFrom('url', url, { publicKey: UC_KEY }));
             document.getElementById('urlInput').value = '';
         }
@@ -234,8 +220,8 @@
         }
 
         async function saveToDB(info) {
-            // লিঙ্ক তৈরির স্থায়ী নিয়ম (ucarecdn.com/UUID/ ফরম্যাট)
-            const videoUrl = `https://ucarecdn.com/${info.uuid}/`;
+            // লিঙ্ক তৈরির পাকাপাকি নিয়ম (শেষে /video.mp4 যোগ করা হয়েছে)
+            const videoUrl = `https://ucarecdn.com/${info.uuid}/video.mp4`;
             const thumbUrl = `https://ucarecdn.com/${info.uuid}/-/preview/640x360/`;
 
             const { error } = await client.from('videos').insert([{
@@ -262,9 +248,12 @@
             grid.innerHTML = '';
 
             videoData.filter(v => v.file_name.toLowerCase().includes(search)).forEach(v => {
-                total += (v.size || 0);
-                // লিঙ্ক মেরামত এবং স্থায়ীত্ব নিশ্চিত করা
-                let link = `https://ucarecdn.com/${v.file_id}/`;
+                total += (v.file_size || 0);
+                // যদি লিঙ্কে .mp4 না থাকে তবে তা মেরামত করা
+                let link = v.file_url;
+                if (!link.includes('video.mp4')) {
+                    link = `https://ucarecdn.com/${v.file_id}/video.mp4`;
+                }
                 
                 grid.innerHTML += `
                     <div class="v-card">
@@ -285,18 +274,18 @@
         function copyL(url) {
             const el = document.createElement('textarea'); el.value = url; document.body.appendChild(el);
             el.select(); document.execCommand('copy'); document.body.removeChild(el);
-            alert('লিঙ্ক কপি হয়েছে!');
+            alert('লিঙ্ক কপি হয়েছে বস্!');
         }
 
         async function delV(id) {
-            if(confirm('বস্, লিস্ট থেকে সরাতে চান?')) {
+            if(confirm('মুছতে চান?')) {
                 const { error } = await client.from('videos').delete().eq('id', id);
                 if (!error) fetchVids();
             }
         }
-        function clearDB() { if(confirm('লিস্ট মুছে যাবে!')) { localStorage.clear(); location.reload(); } }
+        function resetList() { if(confirm('সব ডাটা মুছে যাবে!')) { localStorage.clear(); location.reload(); } }
 
         window.onload = fetchVids;
     </script>
 </body>
-</html>
+    </html>
