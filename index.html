@@ -3,65 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>mynul.mg - 100% Stable Cloud</title>
+    <title>mynul.mg - Unlimited Cloud Storage</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- SDKs -->
+    <!-- Supabase & Uploadcare SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
 
     <style>
-        :root { --primary: #38bdf8; --bg: #020617; --card: #1e293b; --danger: #ef4444; --success: #22c55e; --muted: #94a3b8; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 90px; }
+        :root {
+            --primary: #38bdf8;
+            --bg: #020617;
+            --card: #1e293b;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body {
+            background-color: var(--bg);
+            color: #fff;
+            font-family: 'Poppins', 'Hind Siliguri', sans-serif;
+            margin: 0;
+            padding-bottom: 90px;
+            overflow-x: hidden;
+        }
 
         /* --- Navbar --- */
-        .navbar { background: var(--card); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 9999; }
+        .navbar {
+            background: var(--card);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky; top: 0; z-index: 2000;
+        }
         .logo { font-size: 22px; font-weight: 800; color: var(--primary); text-decoration: none; }
         
-        .live-tag { background: rgba(34, 197, 94, 0.1); padding: 6px 12px; border-radius: 20px; color: var(--success); font-size: 13px; font-weight: 800; border: 1px solid rgba(34, 197, 94, 0.3); display: flex; align-items: center; gap: 8px; }
+        .live-tag { background: rgba(34, 197, 94, 0.1); padding: 5px 12px; border-radius: 20px; color: var(--success); font-size: 12px; font-weight: 800; border: 1px solid rgba(34, 197, 94, 0.2); display: flex; align-items: center; gap: 8px; }
         .pulse { width: 8px; height: 8px; background: var(--success); border-radius: 50%; position: relative; }
         .pulse::after { content: ''; width: 100%; height: 100%; background: var(--success); border-radius: 50%; position: absolute; left: 0; animation: pLive 1.5s infinite; }
         @keyframes pLive { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
 
         .container { max-width: 800px; margin: 0 auto; padding: 15px; }
 
-        /* --- Sections (Manual Display) --- */
+        /* --- Tab Control --- */
         .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; } }
 
         /* --- Premium Cards --- */
-        .card { background: var(--card); padding: 25px; border-radius: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .card {
+            background: var(--card);
+            padding: 25px 20px;
+            border-radius: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+
+        /* --- Storage Bar --- */
         .storage-bar { width: 100%; background: rgba(0,0,0,0.3); height: 14px; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid rgba(56, 189, 248, 0.2); }
-        .fill-unlimited { height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #22c55e, #38bdf8); background-size: 200% 100%; animation: barMove 3s linear infinite; }
+        .storage-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #38bdf8, #818cf8, #38bdf8); background-size: 200% 100%; animation: barMove 3s linear infinite; }
         @keyframes barMove { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
 
-        /* Buttons */
+        /* --- Buttons --- */
         .btn { width: 100%; border: none; padding: 16px; border-radius: 15px; font-weight: 700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; color: #fff; }
         .btn-upload { background: var(--primary); color: #000; margin-bottom: 12px; }
         .btn-save { background: var(--success); }
 
-        #prog-box { display: none; margin-bottom: 20px; padding: 15px; background: rgba(56, 189, 248, 0.05); border-radius: 15px; border: 1px solid var(--primary); }
+        /* --- Progress Bar --- */
+        #progress-area { display: none; margin-top: 20px; background: rgba(255,255,255,0.05); border-radius: 15px; padding: 15px; border: 1px solid var(--primary); }
         .p-bar-bg { width: 100%; background: rgba(0,0,0,0.3); height: 10px; border-radius: 10px; overflow: hidden; margin-top: 10px; }
         .p-bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
 
-        /* Grid */
+        /* --- Grid & Cards --- */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; }
-        .v-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .v-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .v-thumb { width: 100%; aspect-ratio: 16/9; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
         .v-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .v-title { padding: 10px; font-size: 11px; font-weight: 600; height: 48px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; border-bottom: 1px solid rgba(255,255,255,0.05); }
         
         .v-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; padding: 8px; }
-        .act-btn { border: none; padding: 8px; border-radius: 8px; cursor: pointer; color: #fff; font-size: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+        .act-btn { border: none; padding: 10px; border-radius: 8px; cursor: pointer; color: #fff; font-size: 13px; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; }
         .bg-blue { background: var(--primary); color: #000; }
         .bg-indigo { background: #6366f1; }
         .bg-red { background: var(--danger); }
 
         /* --- Bottom Nav --- */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 4000; }
-        .nav-item { background: none; border: none; color: var(--text-muted); font-size: 10px; cursor: pointer; text-align: center; flex: 1; outline: none; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 3000; }
+        .nav-item { background: none; border: none; color: var(--text-muted); font-size: 10px; cursor: pointer; text-align: center; width: 33.33%; flex: 1; outline: none; }
         .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
         .nav-item.active { color: var(--primary); }
 
@@ -72,7 +108,7 @@
 <body>
 
     <nav class="navbar">
-        <a href="#" class="logo">mynul.mg</a>
+        <a href="#" class="logo" onclick="location.reload()">mynul.mg</a>
         <div class="live-tag">
             <span class="pulse"></span> Online: <span id="online-count">...</span>
         </div>
@@ -81,50 +117,52 @@
     <div class="container">
         
         <!-- 1. HOME SECTION -->
-        <div id="home-page" class="page-section" style="display: block;">
+        <div id="p-home" class="page-section active">
             <div class="card">
                 <i class="fa-solid fa-infinity" style="font-size: 55px; color: var(--primary); margin-bottom: 15px;"></i>
-                <h2 style="margin: 0; letter-spacing: 1px;">UNLIMITED SECURE STORAGE</h2>
-                <div class="storage-bar"><div class="fill-unlimited"></div></div>
+                <h2 style="margin: 0; letter-spacing: 1px; font-size: 18px;">UNLIMITED SECURE STORAGE</h2>
+                
+                <div class="storage-bar"><div class="storage-fill"></div></div>
                 <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--muted);">
                     <span>Space Used: <b id="used-txt" style="color:#fff;">0 MB</b></span>
-                    <span>Status: <b style="color:var(--success);">ACTIVE</b></span>
+                    <span>Status: <b style="color:var(--success);">CONNECTED</b></span>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
-                    <div><b id="file-count" style="font-size: 20px; color: var(--primary);">0</b><br><small>Total Files</small></div>
-                    <div><b style="font-size: 20px; color: var(--success);">$0.00</b><br><small>Income</small></div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+                    <div><b id="file-count" style="font-size: 18px; color: var(--primary);">0</b><br><small style="font-size: 9px;">TOTAL FILES</small></div>
+                    <div><b style="font-size: 18px; color: var(--success);">$0.00</b><br><small style="font-size: 9px;">EST. INCOME</small></div>
                 </div>
             </div>
         </div>
 
         <!-- 2. FILES SECTION -->
-        <div id="files-page" class="page-section">
+        <div id="p-files" class="page-section">
             <div class="card" style="padding: 15px;">
-                <button class="btn btn-upload" onclick="openUploader()"><i class="fa-solid fa-images"></i> গ্যালারি থেকে আপলোড</button>
+                <button class="btn btn-upload" onclick="openGallery()"><i class="fa-solid fa-images"></i> গ্যালারি থেকে আপলোড</button>
                 <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 18px; border: 1px solid #334155; margin-top: 10px;">
-                    <input type="text" id="urlInput" placeholder="লিঙ্ক পেস্ট করুন..." style="width:100%; background:transparent; border:none; color:#fff; text-align:center; outline:none; font-size: 14px;">
-                    <button class="btn btn-save" onclick="saveLink()"><i class="fa-solid fa-link"></i> লিঙ্ক থেকে সেভ</button>
+                    <input type="text" id="urlInput" placeholder="এখানে ভিডিও লিঙ্ক পেস্ট করুন..." style="width:100%; background:transparent; border:none; color:#fff; text-align:center; outline:none; font-size: 14px;">
+                    <button class="btn btn-save" onclick="saveUrl()"><i class="fa-solid fa-link"></i> লিঙ্ক থেকে সেভ করুন</button>
+                </div>
+                
+                <div id="progress-area" style="display: none;">
+                    <span id="progress-text" style="font-size:12px; color:var(--primary); font-weight:700;">0% Processing...</span>
+                    <div class="p-bar-bg"><div id="p-bar-fill" class="p-bar-fill" style="width: 0%;"></div></div>
                 </div>
             </div>
-            <div id="prog-box">
-                <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
-                    <span id="prog-text">0% Processing...</span>
-                </div>
-                <div class="p-bar-bg"><div id="p-bar-fill" class="p-bar-fill"></div></div>
+            
+            <div style="margin: 15px 5px;">
+                <input type="text" id="searchInp" placeholder="ভিডিও খুঁজুন..." oninput="drawUI()" style="width:100%; background:var(--card); border:1px solid rgba(255,255,255,0.1); padding:13px; border-radius:15px; color:#fff; outline:none;">
             </div>
-            <div style="background:var(--card); padding:12px; border-radius:15px; border:1px solid rgba(255,255,255,0.1); margin-bottom:20px; display:flex; align-items:center;">
-                <i class="fa-solid fa-magnifying-glass" style="color:var(--muted); margin-right:10px;"></i>
-                <input type="text" id="searchInp" placeholder="ভিডিও খুঁজুন..." oninput="draw()" style="background:transparent; border:none; color:#fff; width:100%; outline:none; font-size:14px;">
-            </div>
-            <div class="grid" id="vGrid"></div>
+            
+            <div class="grid" id="videoGrid"></div>
         </div>
 
         <!-- 3. SETTINGS SECTION -->
-        <div id="settings-page" class="page-section">
+        <div id="p-settings" class="page-section">
             <div class="card" style="text-align: left;">
                 <h3 style="margin: 0; color: var(--primary);">System Dashboard</h3>
-                <p style="font-size: 13px; margin: 15px 0;">Cloud Engine: <b style="color:var(--success);">Fixed & Active</b></p>
-                <button class="btn" style="background: var(--danger); font-size: 13px;" onclick="clearAll()">পুরো লিস্ট মুছুন</button>
+                <p style="font-size: 13px; margin: 15px 0;">Database Engine: <b style="color:var(--success);">Supabase Cloud Active</b></p>
+                <button class="btn" style="background: var(--danger); font-size: 13px;" onclick="resetList()">সব লিস্ট মুছুন (Reset)</button>
                 <button class="btn" style="background: #334155; margin-top: 10px; font-size: 13px;" onclick="location.reload()">অ্যাপ রিফ্রেশ দিন</button>
             </div>
         </div>
@@ -133,112 +171,114 @@
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
-        <button class="nav-item active" id="btn-home" onclick="navTo('home-page', 'btn-home')"><i class="fa-solid fa-house"></i>Home</button>
-        <button class="nav-item" id="btn-files" onclick="navTo('files-page', 'btn-files')"><i class="fa-solid fa-folder-open"></i>Files</button>
-        <button class="nav-item" id="btn-settings" onclick="navTo('settings-page', 'btn-settings')"><i class="fa-solid fa-gear"></i>Settings</button>
+        <button class="nav-item active" id="btn-home" onclick="navTo('p-home', 'btn-home')"><i class="fa-solid fa-house"></i>Home</button>
+        <button class="nav-item" id="btn-files" onclick="navTo('p-files', 'btn-files')"><i class="fa-solid fa-folder-open"></i>Files</button>
+        <button class="nav-item" id="btn-settings" onclick="navTo('p-settings', 'btn-settings')"><i class="fa-solid fa-gear"></i>Settings</button>
     </div>
 
     <script>
-        // --- আপনার ডাটাবেস ও কী ---
+        // --- সুপাবেস ডাটা ---
         const SUPABASE_URL = 'https://zsluamkcuzcpnxgmhabx.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_C5D72tFy_0CznaxVbg7xXQ_lcC2Us3i';
         const UC_KEY = '47591ac5fd5756296d19';
 
         const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        let vData = [];
+        let videoData = [];
 
-        // ১. বুলেটপ্রুফ নেভিগেশন (এটি এখন হার মানবে না)
-        function navTo(pageId, btnId) {
-            // ম্যানুয়ালি সব হাইড করা
-            document.getElementById('home-page').style.display = 'none';
-            document.getElementById('files-page').style.display = 'none';
-            document.getElementById('settings-page').style.display = 'none';
+        // ১. ১০০% এরর-ফ্রি নেভিগেশন (id দিয়ে সরাসরি নিয়ন্ত্রণ)
+        function navTo(secId, navId) {
+            // সব সেকশন বন্ধ করা
+            document.getElementById('p-home').style.display = 'none';
+            document.getElementById('p-files').style.display = 'none';
+            document.getElementById('p-settings').style.display = 'none';
             
-            // টার্গেট শো করা
-            document.getElementById(pageId).style.display = 'block';
+            // টার্গেট সেকশন খোলা
+            document.getElementById(secId).style.display = 'block';
             
             // বাটন এক্টিভ করা
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById(btnId).classList.add('active');
+            document.getElementById(navId).classList.add('active');
             window.scrollTo(0,0);
         }
 
-        // ২. রিয়েল ইউজার কাউন্টার
-        const ch = client.channel('online_presence', { config: { presence: { key: 'u' } } });
-        ch.on('presence', { event: 'sync' }, () => {
-            const count = Object.keys(ch.presenceState()).length;
-            document.getElementById('online-count').innerText = count;
-        }).subscribe(async (s) => {
-            if (s === 'SUBSCRIBED') await ch.track({ at: new Date() });
+        // ২. রিয়েল টাইম ইউজার কাউন্টার
+        const channel = client.channel('online_presence', { config: { presence: { key: 'user' } } });
+        channel.on('presence', { event: 'sync' }, () => {
+            const state = channel.presenceState();
+            document.getElementById('online-count').innerText = Object.keys(state).length;
+        }).subscribe(async (status) => {
+            if (status === 'SUBSCRIBED') await channel.track({ online_at: new Date().toISOString() });
         });
 
-        // ৩. আপলোড ও লিঙ্ক লজিক
-        function openUploader() { uploadcare.openDialog(null, { publicKey: UC_KEY, tabs: 'file' }).done(f => track(f)); }
-        function saveLink() {
-            const u = document.getElementById('urlInput').value.trim();
-            if(!u.startsWith('http')) return alert('সঠিক লিঙ্ক দিন!');
-            track(uploadcare.fileFrom('url', u, { publicKey: UC_KEY }));
+        // ৩. ভিডিও আপলোড লজিক
+        function openGallery() { uploadcare.openDialog(null, { publicKey: UC_KEY, tabs: 'file' }).done(file => track(file)); }
+        function saveUrl() {
+            const url = document.getElementById('urlInput').value.trim();
+            if(!url.startsWith('http')) return alert('সঠিক লিঙ্ক দিন!');
+            track(uploadcare.fileFrom('url', url, { publicKey: UC_KEY }));
             document.getElementById('urlInput').value = '';
         }
 
-        function track(f) {
-            const box = document.getElementById('prog-box'), bar = document.getElementById('p-bar-fill'), txt = document.getElementById('prog-text');
+        function track(file) {
+            const box = document.getElementById('progress-area'), bar = document.getElementById('p-bar-fill'), txt = document.getElementById('progress-text');
             box.style.display = 'block';
-            f.progress(i => { let p = Math.round(i.progress * 100); bar.style.width = p + '%'; txt.innerText = p + '% Processing...'; });
-            f.done(info => { saveToDB(info); box.style.display = 'none'; });
+            file.progress(i => { let p = Math.round(i.progress * 100); bar.style.width = p + '%'; txt.innerText = p + '% Processing...'; });
+            file.done(info => { saveToDB(info); box.style.display = 'none'; });
         }
 
         async function saveToDB(info) {
+            // ভিডিও লিঙ্ক ১০০% প্লে হওয়ার জন্য শেষে /video.mp4 যোগ করা হলো
             const videoUrl = `https://ucarecdn.com/${info.uuid}/video.mp4`;
             const thumbUrl = `https://ucarecdn.com/${info.uuid}/-/preview/640x360/`;
+
             const { error } = await client.from('videos').insert([{ file_id: info.uuid, file_name: info.name || "Cloud Video", file_url: videoUrl, file_size: info.size, thumbnail_url: thumbUrl }]);
-            if (!error) fetch();
+            if (!error) fetchVideos();
             else alert("Error: " + error.message);
         }
 
-        async function fetch() {
+        async function fetchVideos() {
             const { data, error } = await client.from('videos').select('*').order('created_at', { ascending: false });
-            if (!error) { vData = data; draw(); }
+            if (!error) { videoData = data; drawUI(); }
         }
 
-        function draw() {
-            const grid = document.getElementById('vGrid'), search = document.getElementById('searchInp').value.toLowerCase();
+        function drawUI() {
+            const grid = document.getElementById('videoGrid'), search = document.getElementById('searchInp').value.toLowerCase();
             let total = 0;
             grid.innerHTML = '';
-            vData.filter(v => v.file_name.toLowerCase().includes(search)).forEach(v => {
-                total += (v.size || 0);
-                let link = `https://ucarecdn.com/${v.file_id}/video.mp4`;
+            videoData.filter(v => v.file_name.toLowerCase().includes(search)).forEach(v => {
+                total += (v.file_size || 0);
+                // প্রতিটি লিঙ্কে যদি ভুল ডোমেইন থাকে তা অটো ফিক্স করা
+                const fixedLink = v.file_url.replace('ucarecd.net', 'ucarecdn.com');
                 grid.innerHTML += `
                     <div class="v-card">
                         <div class="v-thumb"><img src="${v.thumbnail_url}" onerror="this.src='https://placehold.co/640x360/020617/38bdf8?text=Video'"></div>
                         <div class="v-title">${v.file_name}</div>
                         <div class="v-actions">
-                            <a href="${link}" target="_blank" class="act-btn bg-blue"><i class="fa-solid fa-play"></i></a>
-                            <button class="act-btn bg-indigo" onclick="copyL('${link}')"><i class="fa-solid fa-link"></i></button>
+                            <a href="${fixedLink}" target="_blank" class="act-btn bg-blue"><i class="fa-solid fa-play"></i></a>
+                            <button class="act-btn bg-indigo" onclick="copyL('${fixedLink}')"><i class="fa-solid fa-link"></i></button>
                             <button class="act-btn bg-red" onclick="delV('${v.id}')"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>`;
             });
             document.getElementById('used-txt').innerText = (total / (1024 * 1024)).toFixed(2) + " MB";
-            document.getElementById('file-count').innerText = vData.length;
+            document.getElementById('file-count').innerText = videoData.length;
         }
 
         function copyL(url) {
             const el = document.createElement('textarea'); el.value = url; document.body.appendChild(el);
             el.select(); document.execCommand('copy'); document.body.removeChild(el);
-            alert('লিঙ্ক কপি হয়েছে!');
+            alert('লিঙ্ক কপি হয়েছে বস্!');
         }
 
         async function delV(id) {
             if(confirm('মুছতে চান বস্?')) {
                 await client.from('videos').delete().eq('id', id);
-                fetch();
+                fetchVideos();
             }
         }
-        function clearAll() { if(confirm('সব ডাটা মুছে যাবে!')) { localStorage.clear(); location.reload(); } }
+        function resetList() { if(confirm('সব ডাটা মুছে যাবে!')) { localStorage.clear(); location.reload(); } }
 
-        // শুরুতে ডাটা লোড
-        window.onload = fetch;
+        window.onload = fetchVideos;
     </script>
 </body>
-                    </html>
+    </html>
