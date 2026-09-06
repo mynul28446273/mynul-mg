@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>mynul.mg - 100% AI Video Generator</title>
+    <title>mynul.mg - 100% AI Video Pro</title>
     
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
@@ -14,56 +14,38 @@
 
     <style>
         :root { 
-            --primary: #a855f7; 
-            --bg: #020617; 
-            --card: #0f172a; 
-            --accent: #38bdf8;
-            --success: #22c55e;
-            --danger: #ef4444;
+            --primary: #a855f7; --bg: #020617; --card: #0f172a; 
+            --accent: #38bdf8; --success: #22c55e; --muted: #94a3b8;
         }
-
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { 
-            background-color: var(--bg); 
-            color: #fff; 
+            background-color: var(--bg); color: #fff; 
             font-family: 'Poppins', 'Hind Siliguri', sans-serif; 
-            margin: 0; padding: 15px; 
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+            margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
-
         .navbar { 
-            width: 100%; max-width: 500px;
-            background: var(--card); padding: 15px 20px; 
+            width: 100%; max-width: 500px; background: var(--card); padding: 15px 20px; 
             display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 1px solid rgba(255,255,255,0.1); 
-            border-radius: 15px; margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1); border-radius: 15px; margin-bottom: 20px;
         }
-        .logo { font-size: 22px; font-weight: 900; color: var(--primary); text-decoration: none; text-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
-
+        .logo { font-size: 22px; font-weight: 900; color: var(--primary); text-decoration: none; }
         .app-card {
-            width: 100%; max-width: 500px;
-            background: var(--card); padding: 25px; 
+            width: 100%; max-width: 500px; background: var(--card); padding: 25px; 
             border-radius: 30px; border: 1px solid rgba(255,255,255,0.05);
             box-shadow: 0 20px 50px rgba(0,0,0,0.5); text-align: center;
         }
-
-        /* Photo Upload Area */
-        .upload-zone {
+        .upload-section {
             width: 100%; aspect-ratio: 16/9; background: rgba(0,0,0,0.4);
             border: 2px dashed var(--primary); border-radius: 20px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; transition: 0.3s; margin-bottom: 20px; overflow: hidden;
         }
-        .upload-zone img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .upload-zone.active { border-style: solid; border-color: var(--success); }
-
+        .upload-section img { width: 100%; height: 100%; object-fit: cover; display: none; }
         textarea {
-            width: 100%; height: 100px; background: rgba(0,0,0,0.5);
+            width: 100%; height: 110px; background: rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.1); border-radius: 15px;
-            color: #fff; padding: 15px; font-size: 14px; resize: none; margin-top: 10px;
+            color: #fff; padding: 15px; font-size: 14px; resize: none; margin-top: 10px; line-height: 1.5;
         }
-        textarea:focus { border-color: var(--primary); }
-
         .gen-btn {
             background: linear-gradient(135deg, var(--primary), #7c3aed);
             color: #fff; width: 100%; border: none; padding: 18px;
@@ -72,150 +54,11 @@
             box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
         }
         .gen-btn:disabled { opacity: 0.6; cursor: wait; }
-
-        /* Progress Animation */
         #loading-ui { display: none; margin-top: 20px; }
         .spinner { width: 40px; height: 40px; border: 4px solid rgba(168, 85, 247, 0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Result Area */
-        #result-section { display: none; margin-top: 30px; width: 100%; max-width: 500px; animation: fadeIn 0.5s ease; }
-        .video-container { width: 100%; background: #000; border-radius: 20px; overflow: hidden; border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(168, 85, 247, 0.2); }
+        #result-section { display: none; margin-top: 30px; width: 100%; max-width: 500px; }
+        .video-container { width: 100%; background: #000; border-radius: 20px; overflow: hidden; border: 2px solid var(--primary); }
         video { width: 100%; display: block; }
-
         .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .btn-act { padding: 15px; border-radius: 12px; border: none; font-weight: 800; font-size: 13px; cursor: pointer; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .bg-dl { background: var(--success); color: #fff; }
-        .bg-reset { background: #334155; color: #fff; }
-
-        .uploadcare--widget { display: none !important; }
-    </style>
-</head>
-<body>
-
-    <nav class="navbar">
-        <a href="#" class="logo">mynul.mg</a>
-        <div class="badge">AI PRO ENGINE</div>
-    </nav>
-
-    <div class="app-card">
-        <h2 style="margin: 0 0 5px; font-weight: 900; color: #fff;">AI VIDEO GEN</h2>
-        <p style="color: var(--muted); font-size: 12px; margin-bottom: 25px;">ফটো এবং টেক্সট থেকে ১-৩ মিনিটের প্রফেশনাল ভিডিও</p>
-
-        <!-- Image Upload -->
-        <div class="upload-zone" id="dropZone" onclick="openUploader()">
-            <div id="upload-hint">
-                <i class="fa-solid fa-cloud-arrow-up" style="font-size: 40px; color: var(--primary);"></i>
-                <p style="font-size: 13px; color: var(--muted); margin-top: 10px;">Upload Background Photo</p>
-            </div>
-            <img id="previewImg" src="">
-        </div>
-
-        <!-- Text Input -->
-        <div style="text-align: left;">
-            <label style="font-size: 12px; font-weight: 800; color: var(--primary); margin-left: 5px;">ভিডিও ডেসক্রিপশন / ডায়লগ</label>
-            <textarea id="promptInp" placeholder="ভিডিওটি কেমন হবে বিস্তারিত লিখুন..."></textarea>
-        </div>
-
-        <button id="genBtn" class="gen-btn" onclick="generateVideo()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> GENERATE AI VIDEO
-        </button>
-
-        <!-- Loading -->
-        <div id="loading-ui">
-            <div class="spinner"></div>
-            <p id="status-msg" style="font-size: 12px; color: var(--primary); font-weight: 700;">AI is working on your video... 0%</p>
-        </div>
-    </div>
-
-    <!-- Result Area -->
-    <div id="result-section">
-        <h3 style="text-align: center; color: var(--primary); margin-bottom: 15px;">Generated Result</h3>
-        <div class="video-container">
-            <video id="finalVideo" controls loop playsinline></video>
-        </div>
-        <div class="btn-group">
-            <a id="dlBtn" href="#" download="mynul_ai_video.mp4" class="btn-act bg-dl"><i class="fa-solid fa-download"></i> SAVE</a>
-            <button class="btn-act bg-reset" onclick="location.reload()"><i class="fa-solid fa-rotate-right"></i> NEW</button>
-        </div>
-    </div>
-
-    <div style="margin-top: 50px; font-size: 10px; color: #475569; text-align: center;">
-        Powered by Enterprise Video AI 2.0 | mynul.mg
-    </div>
-
-    <input type="hidden" id="uc-widget">
-
-    <script>
-        const UC_KEY = '47591ac5fd5756296d19';
-        let imageUrl = "";
-
-        // ১. ফটো আপলোডার
-        function openUploader() {
-            uploadcare.openDialog(null, {
-                publicKey: UC_KEY,
-                tabs: 'file',
-                imagesOnly: true
-            }).done(file => {
-                file.done(info => {
-                    imageUrl = info.cdnUrl;
-                    const preview = document.getElementById('previewImg');
-                    preview.src = info.cdnUrl;
-                    preview.style.display = 'block';
-                    document.getElementById('upload-hint').style.display = 'none';
-                    document.getElementById('dropZone').classList.add('active');
-                });
-            });
-        }
-
-        // ২. ভিডিও জেনারেশন ইঞ্জিন (Stable Video Diffusion Logic)
-        async function generateVideo() {
-            const prompt = document.getElementById('promptInp').value.trim();
-            const btn = document.getElementById('genBtn');
-            const loading = document.getElementById('loading-ui');
-            const result = document.getElementById('result-section');
-            const video = document.getElementById('finalVideo');
-
-            if(!imageUrl) return alert('বস্, আগে একটি ফটো আপলোড করুন!');
-            if(!prompt) return alert('ভিডিওটি কেমন হবে তা লিখে দিন!');
-
-            // প্রসেসিং শুরু
-            btn.disabled = true;
-            btn.style.display = 'none';
-            loading.style.display = 'block';
-            result.style.display = 'none';
-
-            let progress = 0;
-            const progInt = setInterval(() => {
-                progress += Math.floor(Math.random() * 3) + 1;
-                if(progress > 98) progress = 98;
-                document.getElementById('status-msg').innerText = "AI is rendering your video... " + progress + "%";
-            }, 800);
-
-            // এআই ভিডিও সার্ভার লিঙ্ক (SVD + Motion Path Engine)
-            // আমরা হাই-কোয়ালিটি জেনারেটরের জন্য পোলিনেশন এবং ডাইনামিক মোশন এপিআই কম্বাইন করছি
-            const cleanPrompt = encodeURIComponent("cinematic animation, " + prompt + " dynamic motion, high resolution, 4k");
-            const seed = Math.floor(Math.random() * 999999);
-            
-            // এই লিঙ্কটি সরাসরি ভিডিও স্ট্রিম জেনারেট করবে
-            const generatedVideoUrl = `https://pollinations.ai/p/${cleanPrompt}?width=1280&height=720&seed=${seed}&model=video&image=${encodeURIComponent(imageUrl)}`;
-
-            // ভিডিও প্রসেসিং হওয়ার জন্য ১০ সেকেন্ড সময় দিন
-            setTimeout(() => {
-                clearInterval(progInt);
-                loading.style.display = 'none';
-                
-                video.src = generatedVideoUrl;
-                document.getElementById('dlBtn').href = generatedVideoUrl;
-                
-                result.style.display = 'block';
-                video.load();
-                video.play().catch(e => console.log("Auto-play blocked"));
-
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                alert('অভিনন্দন বস্! ভিডিও তৈরি হয়ে গেছে।');
-            }, 12000); 
-        }
-    </script>
-</body>
-</html>
+        .btn-act { padding: 15px; border-radius: 12px; border: none; font-weight: 800; font-size: 13px; cursor: pointer; text-decoration: none; tex
